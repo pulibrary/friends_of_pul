@@ -1,0 +1,59 @@
+.alert--message h2 {
+    @include visually-hidden();
+}
+
+.alert--message, .messages-error {
+    background: lighten($orange, 10);
+    border-radius: 4px;
+    padding: 1em;
+    margin: 1em 0; 
+
+    h3 a, p {
+        color: $white;
+    }
+
+    h3 {
+        color: $white;
+        display: inline-block;
+        margin: 0;
+        font-size: 1.3em;
+        font-weight: bold;
+    }
+
+    p {
+        margin-bottom: 0;
+        font-weight: bold;
+
+        a {
+            color: $white;
+            text-decoration: underline;
+        }
+        &:empty {
+            display: none;
+        }
+    }
+    i {
+        color: $white;
+        margin-right: 0.5em;
+    }
+}
+
+.alert--message { 
+    -webkit-animation-duration: 2s; 
+    animation-duration: 2s; 
+    -webkit-animation-fill-mode: both; 
+    animation-fill-mode: both; 
+} 
+
+@-webkit-keyframes flash { 
+    0%, 100% {opacity: 1;} 
+    50% {opacity: 0;} 
+} 
+@keyframes flash { 
+    0%, 100% {opacity: 1;} 
+    50% {opacity: 0;} 
+} 
+.alert--message { 
+    -webkit-animation-name: flash; 
+    animation-name: flash; 
+}
