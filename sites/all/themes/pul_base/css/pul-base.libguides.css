@@ -19,10 +19,7 @@ button {
   line-height: 1;
   padding: 0.75em 1em;
   text-decoration: none;
-  -webkit-user-select: none;
-     -moz-user-select: none;
-      -ms-user-select: none;
-          user-select: none;
+  user-select: none;
   vertical-align: middle;
   white-space: nowrap; }
   button:hover,
@@ -125,6 +122,7 @@ dl {
 
 table {
   -webkit-font-feature-settings: "kern", "liga", "tnum";
+  -moz-font-feature-settings: "kern", "liga", "tnum";
   -ms-font-feature-settings: "kern", "liga", "tnum";
   font-feature-settings: "kern", "liga", "tnum";
   border-collapse: collapse;
@@ -149,6 +147,7 @@ th {
 
 body {
   -webkit-font-feature-settings: "kern", "liga", "pnum";
+  -moz-font-feature-settings: "kern", "liga", "pnum";
   -ms-font-feature-settings: "kern", "liga", "pnum";
   font-feature-settings: "kern", "liga", "pnum";
   -webkit-font-smoothing: antialiased;
@@ -658,6 +657,8 @@ a:hover {
         left: -2em;
         position: absolute;
         margin-left: 2em;
+        -moz-box-shadow: 0px 3px 8px #646464;
+        -webkit-box-shadow: 0px 3px 8px #646464;
         box-shadow: 0px 3px 8px #646464; } }
     @media (min-width: 44em) {
       .wrapper--navigation li > ul.menu .menu {
@@ -794,3 +795,5 @@ a:hover {
         margin-left: 0;
         margin-right: 1.6666666667%;
         clear: none; } }
+
+/*# sourceMappingURL=pul-base.libguides.css.map */

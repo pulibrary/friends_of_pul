@@ -19,10 +19,7 @@ button {
   line-height: 1;
   padding: 0.75em 1em;
   text-decoration: none;
-  -webkit-user-select: none;
-     -moz-user-select: none;
-      -ms-user-select: none;
-          user-select: none;
+  user-select: none;
   vertical-align: middle;
   white-space: nowrap; }
   button:hover,
@@ -125,6 +122,7 @@ dl {
 
 table {
   -webkit-font-feature-settings: "kern", "liga", "tnum";
+  -moz-font-feature-settings: "kern", "liga", "tnum";
   -ms-font-feature-settings: "kern", "liga", "tnum";
   font-feature-settings: "kern", "liga", "tnum";
   border-collapse: collapse;
@@ -149,6 +147,7 @@ th {
 
 body {
   -webkit-font-feature-settings: "kern", "liga", "pnum";
+  -moz-font-feature-settings: "kern", "liga", "pnum";
   -ms-font-feature-settings: "kern", "liga", "pnum";
   font-feature-settings: "kern", "liga", "pnum";
   -webkit-font-smoothing: antialiased;
@@ -251,3 +250,5 @@ p:empty {
 
 .strong {
   font-weight: bold; }
+
+/*# sourceMappingURL=pul-base.hacks.css.map */
