@@ -904,18 +904,21 @@ a:hover {
   z-index: 1; }
 
 .front .wrapper--highlighted {
-  background: rgba(142, 150, 160, 0.75);
+  background: rgba(142, 150, 160, 0.5);
   padding: 0;
-  background-size: 1600px auto; }
+  background-size: 1600px auto;
+  min-height: 300px; }
   @media (min-width: 44em) {
     .front .wrapper--highlighted {
-      background: linear-gradient(rgba(142, 150, 160, 0.75), rgba(142, 150, 160, 0.75)), url(../images/bg-test.jpg) center no-repeat; } }
+      background: linear-gradient(rgba(142, 150, 160, 0.5), rgba(142, 150, 160, 0.5)), url(../images/friends-highlight.jpg) center no-repeat; } }
   .front .wrapper--highlighted .l-region--highlighted {
     padding: 1em 0;
     position: relative; }
     @media (min-width: 44em) {
       .front .wrapper--highlighted .l-region--highlighted {
         padding: 4em 0; } }
+  .front .wrapper--highlighted .block__content {
+    display: none; }
 
 .block--views-spotlight-dispalsys-block {
   -sgs-span-settings: ("span": 12, "location": 1, "grid": 12, "gutter": 0.6666666667, "style": "split", "start row": true, "end row": true, "fixed gutter": false, "split gutter": 1, "gutter property": "margin", "options": ());
@@ -991,7 +994,7 @@ a:hover {
       margin-right: 0; } }
   @media (min-width: 70em) {
     .block--pudl-highlight {
-      display: block;
+      display: none;
       -sgs-span-settings: ("span": 2, "location": 11, "grid": 12, "gutter": 0.6666666667, "style": "split", "start row": false, "end row": true, "fixed gutter": false, "split gutter": 1, "gutter property": "margin", "options": ());
       width: 13.3333333333%;
       float: right;
