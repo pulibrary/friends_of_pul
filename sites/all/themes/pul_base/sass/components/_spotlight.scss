@@ -91,7 +91,7 @@
     padding: 0.5em;
 
     @include breakpoint($tab) {
-        display: block;
+        display: none;
         @include grid-span(3,11);
         margin-right: 0;
     }
