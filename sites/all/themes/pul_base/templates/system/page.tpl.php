@@ -80,6 +80,9 @@
         <?php endif; ?>
         <?php print render($page['branding']); ?>
       </section>
+    </div>
+
+    <div class="wrapper wrapper--site-branding">
       <section class="friends-branding">
         <h2><a href="<?php print $front_page; ?>" title="<?php print t('Friends of the Princeton University Library - Home'); ?>"  class="friends-logo"><img src="/sites/all/themes/pul_base/svg_icons/compressed/friends.svg" alt="<?php print t('Home'); ?>" /><span class="site-name"><?php print $site_name; ?></span></a></h2>
         <?php print render($page['friends-branding']); ?>

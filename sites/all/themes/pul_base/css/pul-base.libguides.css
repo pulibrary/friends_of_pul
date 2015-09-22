@@ -19,7 +19,10 @@ button {
   line-height: 1;
   padding: 0.75em 1em;
   text-decoration: none;
-  user-select: none;
+  -webkit-user-select: none;
+     -moz-user-select: none;
+      -ms-user-select: none;
+          user-select: none;
   vertical-align: middle;
   white-space: nowrap; }
   button:hover,
@@ -69,7 +72,8 @@ textarea {
   font-size: 1em;
   margin-bottom: 0.75em;
   padding: 0.5em;
-  transition: border-color;
+  -webkit-transition: border-color;
+          transition: border-color;
   width: 100%; }
   input[type="color"]:hover, input[type="date"]:hover, input[type="datetime"]:hover, input[type="datetime-local"]:hover, input[type="email"]:hover, input[type="month"]:hover, input[type="number"]:hover, input[type="password"]:hover, input[type="search"]:hover, input[type="tel"]:hover, input[type="text"]:hover, input[type="time"]:hover, input[type="url"]:hover, input[type="week"]:hover, textarea:hover,
   select[multiple=multiple]:hover,
@@ -122,7 +126,6 @@ dl {
 
 table {
   -webkit-font-feature-settings: "kern", "liga", "tnum";
-  -moz-font-feature-settings: "kern", "liga", "tnum";
   -ms-font-feature-settings: "kern", "liga", "tnum";
   font-feature-settings: "kern", "liga", "tnum";
   border-collapse: collapse;
@@ -147,7 +150,6 @@ th {
 
 body {
   -webkit-font-feature-settings: "kern", "liga", "pnum";
-  -moz-font-feature-settings: "kern", "liga", "pnum";
   -ms-font-feature-settings: "kern", "liga", "pnum";
   font-feature-settings: "kern", "liga", "pnum";
   -webkit-font-smoothing: antialiased;
@@ -173,7 +175,8 @@ p {
 a {
   color: #2762ae;
   text-decoration: none;
-  transition: color 0.1s linear; }
+  -webkit-transition: color 0.1s linear;
+          transition: color 0.1s linear; }
   a:active,
   a:focus,
   a:hover {
@@ -241,7 +244,8 @@ body {
 .l-region--highlighted,
 .l-main,
 .l-branding,
-.l-region--footer {
+.l-region--footer,
+.friends-branding {
   max-width: 1200px;
   margin: 0 auto; }
   .l-region--navigation::after,
@@ -249,7 +253,8 @@ body {
   .l-region--highlighted::after,
   .l-main::after,
   .l-branding::after,
-  .l-region--footer::after {
+  .l-region--footer::after,
+  .friends-branding::after {
     clear: both;
     content: "";
     display: table; }
@@ -348,7 +353,8 @@ a:hover {
 .wrapper--branding {
   background-color: #494f57;
   min-height: 30px;
-  border-top: 5px solid #E87411; }
+  border-top: 5px solid #E87411;
+  border-bottom: 1px solid #42474f; }
   .wrapper--branding .site-name {
     display: none; }
 
@@ -426,13 +432,10 @@ a:hover {
   width: 1px !important;
   overflow: hidden; }
 
-.l-region--friends-branding {
-  background-color: #000000;
+.wrapper--site-branding {
+  background-color: #666d78;
+  border-bottom: #ddd 1px solid;
   min-height: 90px; }
-  .l-region--friends-branding .site-name {
-    display: none; }
-  .l-region--friends-branding p {
-    display: none; }
 
 .friends-branding h2 {
   margin: 0; }
@@ -440,7 +443,7 @@ a:hover {
 .friends-branding .homepage-tab-form-message {
   display: none; }
 
-.friends-logo {
+.friends-branding .friends-logo {
   line-height: 21px;
   height: 90px;
   margin-left: -0.7em;
@@ -452,39 +455,43 @@ a:hover {
   clear: none;
   clear: both; }
   @media (min-width: 44em) {
-    .friends-logo {
+    .friends-branding .friends-logo {
       -sgs-span-settings: ("span": 3, "location": 1, "grid": 12, "gutter": 0.6666666667, "style": "split", "start row": true, "end row": false, "fixed gutter": false, "split gutter": 1, "gutter property": "margin", "options": ());
       width: 21.6666666667%;
       float: left;
       margin-right: -100%;
       margin-left: 1.6666666667%;
       clear: none; } }
-  .friends-logo:before {
+  .friends-branding .friends-logo:before {
     /* create a full-height inline block pseudo=element */
     content: ' ';
     display: inline-block;
     vertical-align: middle;
     /* vertical alignment of the inline element */
     height: 100%; }
-  .friends-logo img {
+  .friends-branding .friends-logo img {
     padding: 0 1em;
     margin: 0 auto;
     display: inline-block;
     vertical-align: middle; }
     @media (min-width: 70em) {
-      .friends-logo img {
+      .friends-branding .friends-logo img {
         padding: 0;
         margin: 0; } }
 
-.svg .friends-logo img {
+.svg .friends-branding .friends-logo img {
   display: none; }
 
-.svg .friends-logo {
-  background: url("../svg_icons/compressed/friends.svg") center center no-repeat;
+.svg .friends-branding .friends-logo {
+  background: url("../svg_icons/compressed/friends-of-library.svg") center center no-repeat;
   background-size: cover;
-  display: block; }
+  display: block;
+  height: 50px;
+  width: 310px;
+  margin: 0;
+  padding-top: 30px; }
   @media (min-width: 44em) {
-    .svg .friends-logo {
+    .svg .friends-branding .friends-logo {
       margin-left: 0; } }
 
 .wrapper--navigation {
@@ -728,8 +735,6 @@ a:hover {
         left: -2em;
         position: absolute;
         margin-left: 2em;
-        -moz-box-shadow: 0px 3px 8px #646464;
-        -webkit-box-shadow: 0px 3px 8px #646464;
         box-shadow: 0px 3px 8px #646464; } }
     @media (min-width: 44em) {
       .wrapper--navigation li > ul.menu .menu {
@@ -866,5 +871,3 @@ a:hover {
         margin-left: 0;
         margin-right: 1.6666666667%;
         clear: none; } }
-
-/*# sourceMappingURL=pul-base.libguides.css.map */

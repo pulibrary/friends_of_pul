@@ -3,6 +3,7 @@
     background-color: $gray-dark;
     min-height: 30px;
     border-top: 5px solid $orange;
+    border-bottom: 1px solid darken($gray-dark, 3);
 
     .site-name {
       display: none;
@@ -87,16 +88,12 @@
 // Friends stuff
 
 // branding
-.l-region--friends-branding {
-    background-color: $black;
-    min-height: 90px;
 
-    .site-name {
-      display: none;
-    }
 
-    p {display:none;}
-
+.wrapper--site-branding {
+  background-color: #666d78;
+  border-bottom: $light-gray 1px solid;
+  min-height: 90px;
 }
 
 .friends-branding {
@@ -109,49 +106,55 @@
   }
 }
 
+.friends-branding {
+  // non-SVG logo
+  .friends-logo {
+      line-height: 21px;
+      height: 90px;
+      margin-left: -0.7em;
 
-// non-SVG logo
-.friends-logo {
-    line-height: 21px;
-    height: 90px;
-    margin-left: -0.7em;
+      @include grid-span(12);
+      clear: both;
 
-    @include grid-span(12);
-    clear: both;
+      @include breakpoint($tab) {
+          @include grid-span(3,1);
+      }
 
-    @include breakpoint($tab) {
-        @include grid-span(3,1);
-    }
+      &:before { /* create a full-height inline block pseudo=element */
+      content: ' ';
+      display: inline-block;
+      vertical-align: middle;  /* vertical alignment of the inline element */
+      height: 100%;
+      }
 
-    &:before { /* create a full-height inline block pseudo=element */
-    content: ' ';
-    display: inline-block;
-    vertical-align: middle;  /* vertical alignment of the inline element */
-    height: 100%;
-    }
+      img {
+          padding: 0 1em;
+          margin: 0 auto;
+          display: inline-block;
+          vertical-align: middle;
 
-    img {
-        padding: 0 1em;
-        margin: 0 auto;
-        display: inline-block;
-        vertical-align: middle;
-
-        @include breakpoint($desk) {
-            padding: 0;
-            margin: 0;
-        }
-    }
+          @include breakpoint($desk) {
+              padding: 0;
+              margin: 0;
+          }
+      }
+  }
 }
 
 // SVG logo
 .svg {
- .friends-logo img {
+  .friends-branding .friends-logo img {
    display: none;
  }
- .friends-logo {
-   background: url("../svg_icons/compressed/friends.svg") center center no-repeat;
+ .friends-branding .friends-logo {
+   background: url("../svg_icons/compressed/friends-of-library.svg") center center no-repeat;
    background-size: cover;
    display: block;
+
+    height: 50px;
+    width: 310px;
+    margin: 0;
+    padding-top: 30px;
 
    @include breakpoint($tab) {
     margin-left: 0;
