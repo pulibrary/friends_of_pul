@@ -31,6 +31,7 @@ plugins[panels][layouts] = panels/layouts
 ; Regions
 ; ========================================
 regions[branding] = Branding
+regions[friends-branding] = Friends Branding
 regions[header] = Header
 regions[navigation] = Navigation
 regions[highlighted] = Highlighted

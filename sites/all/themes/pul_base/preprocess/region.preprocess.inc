@@ -9,7 +9,7 @@
  * Implements hook_preprocess_region().
  */
 function pul_base_preprocess_region(&$variables) {
-  
+
   if (strpos($variables['region'], 'navigation') === 0) {
     // Allow a region-specific template to override region--navigation.
     array_unshift($variables['theme_hook_suggestions'], 'region__navigation');
@@ -18,6 +18,11 @@ function pul_base_preprocess_region(&$variables) {
   if (strpos($variables['region'], 'branding') === 0) {
     // Allow a region-specific template to override region--navigation.
     array_unshift($variables['theme_hook_suggestions'], 'region__branding');
+  }
+
+  if (strpos($variables['region'], 'friends-branding') === 0) {
+    // Allow a region-specific template to override region--navigation.
+    array_unshift($variables['theme_hook_suggestions'], 'region__friends-branding');
   }
 
    if (strpos($variables['region'], 'highlighted') === 0) {

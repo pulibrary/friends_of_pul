@@ -1,7 +1,7 @@
 // branding
 .wrapper--branding {
     background-color: $gray-dark;
-    min-height: 50px;
+    min-height: 30px;
     border-top: 5px solid $orange;
 
     .site-name {
@@ -22,15 +22,25 @@
 
 // non-SVG logo
 .site-logo {
+  /*
     line-height: 21px;
-    height: 50px;
+    height: 30px;
     margin-left: -0.7em;
+    */
+    margin-top: 20px;
+    padding: 0 1em;
+    height: 18px;
+    position: relative;
+    top: 50%;
+    -webkit-transform: translateY(-50%);
+    -ms-transform: translateY(-50%);
+    transform: translateY(-50%);
 
     @include grid-span(12);
     clear: both;
 
     @include breakpoint($tab) {
-        @include grid-span(6,1);
+        @include grid-span(3,1);
     }
 
     &:before { /* create a full-height inline block pseudo=element */
@@ -71,4 +81,80 @@
 
 .front h1 {
   @include visually-hidden();
+}
+
+
+// Friends stuff
+
+// branding
+.l-region--friends-branding {
+    background-color: $black;
+    min-height: 90px;
+
+    .site-name {
+      display: none;
+    }
+
+    p {display:none;}
+
+}
+
+.friends-branding {
+  h2 {
+    margin: 0;
+  }
+
+  .homepage-tab-form-message {
+    display: none;
+  }
+}
+
+
+// non-SVG logo
+.friends-logo {
+    line-height: 21px;
+    height: 90px;
+    margin-left: -0.7em;
+
+    @include grid-span(12);
+    clear: both;
+
+    @include breakpoint($tab) {
+        @include grid-span(3,1);
+    }
+
+    &:before { /* create a full-height inline block pseudo=element */
+    content: ' ';
+    display: inline-block;
+    vertical-align: middle;  /* vertical alignment of the inline element */
+    height: 100%;
+    }
+
+    img {
+        padding: 0 1em;
+        margin: 0 auto;
+        display: inline-block;
+        vertical-align: middle;
+
+        @include breakpoint($desk) {
+            padding: 0;
+            margin: 0;
+        }
+    }
+}
+
+// SVG logo
+.svg {
+ .friends-logo img {
+   display: none;
+ }
+ .friends-logo {
+   background: url("../svg_icons/compressed/friends.svg") center center no-repeat;
+   background-size: cover;
+   display: block;
+
+   @include breakpoint($tab) {
+    margin-left: 0;
+   }
+ }
 }
