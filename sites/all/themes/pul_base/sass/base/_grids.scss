@@ -15,26 +15,27 @@ body {
 	background: $white;
 }
 
-.l-header, 
-.l-footer, 
+.l-header,
+.l-footer,
 .wrapper {
 	margin: 0 auto;
 	@include clearfix;
 }
 
-.l-region--navigation, 
-.l-region--highlighted, 
-.l-region--highlighted, 
-.l-main, 
-.l-branding, 
-.l-region--footer {
+.l-region--navigation,
+.l-region--highlighted,
+.l-region--highlighted,
+.l-main,
+.l-branding,
+.l-region--footer,
+.friends-branding {
 	max-width: 1200px;
 	margin: 0 auto;
 	@include clearfix;
 }
 
 .block--quicktabs-homepage-search-tabs {
-	@include grid-span(12); 
+	@include grid-span(12);
 	clear: both;
 	@include breakpoint($desk) {
 		@include grid-span(9,1);
