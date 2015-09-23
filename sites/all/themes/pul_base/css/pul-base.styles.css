@@ -1688,7 +1688,7 @@ a.skip2main:focus {
     right: 30px;
     bottom: 30px; } }
 
-.view-library-hours .view-header {
+.view-calendar .view-header {
   border-top: none;
   border-right: 2px solid #ffffff;
   border-left: none;
