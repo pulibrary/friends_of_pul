@@ -6,3 +6,10 @@
     font-weight: bold;
     background-color: #2762ae;
 }
+
+footer .btn a {
+    @include button(flat, $orange-darker);
+    text-transform: uppercase;
+    color: $white;
+    letter-spacing: 0.1em;
+}

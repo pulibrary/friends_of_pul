@@ -8,29 +8,19 @@
 	clear: both;
 	padding: 1em;
 
-	nav, .block--block-1 {
+	.block--block {
 		@include grid-span(12, $output-style: 'float');
 		@include breakpoint($tab) {
 			@include grid-span(3, $output-style: 'float');
 		}
 	}
 
-	nav:first-child {
+	.block--block:first-child {
 		margin-left: 0;
 	}
 
-	.block--block-1 {
+	.block--block:last-child {
 		margin-right: 0;
-	}
-
-	nav ul {
-		display: none;
-	}
-
-	@include breakpoint($tab) {
-		nav ul {
-			display: block;
-		}
 	}
 
 	address, .footer--copyright, a {
@@ -79,7 +69,7 @@
    display: inline-block;
 
    line-height: 11px;
-   height: 24px;
+   height: 34px;
 
    &:before { /* create a full-height inline block pseudo=element */
 	    content: ' ';
@@ -95,12 +85,12 @@
  }
  .facebook-logo {
  	background-image: url("../svg_icons/compressed/facebook.svg");
- 	width: 24px;
+ 	width: 34px;
  	margin: 0 0.2em 0.75em;
  }
  .twitter-logo {
  	background-image: url("../svg_icons/compressed/twitter.svg");
- 	width: 24px;
+ 	width: 34px;
  	margin: 0 0.2em 0.75em;
  }
  .govdocs-logo {
