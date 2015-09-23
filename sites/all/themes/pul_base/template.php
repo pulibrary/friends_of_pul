@@ -13,7 +13,7 @@ function pul_base_date_nav_title($params) {
     $date_info = $view->date_info;
     $link = !empty($params['link']) ? $params['link'] : FALSE;
     $format = !empty($params['format']) ? $params['format'] : NULL;
-    
+
     switch ($granularity) {
         case 'year':
         $title = $date_info->year;
@@ -31,7 +31,7 @@ function pul_base_date_nav_title($params) {
         $title = date_format_date($date_info->min_date, 'custom', $format);
         $date_arg = $date_info->year .'-'. date_pad($date_info->month) .'-'. date_pad($date_info->day);
         break;
-        
+
         case 'week':
         $format = !empty($format) ? $format : (empty($date_info->mini) ? 'F j Y' : 'F j');
         $title = t('Week of @date', array('@date' => date_format_date($date_info->min_date, 'custom', $format)));
@@ -118,4 +118,15 @@ function pul_base_form_alter(&$form, &$form_state, $form_id) {
             break;
     }
 
+}
+
+function pul_base_page_alter(&$page)
+{
+  if (arg(0) == 'search')
+  {
+    if (!empty($page['content']['system_main']['search_form']))
+    {
+      hide($page['content']['system_main']['search_form']);
+    }
+  }
 }
