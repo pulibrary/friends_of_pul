@@ -3,15 +3,15 @@
     padding: 0;
     background-size: 1600px auto;
     min-height: 300px;
-    @include breakpoint($tab) {
-        background:
+
+    background:
     linear-gradient(
       rgba(lighten($gray-dark, 28), 0.5),
       rgba(lighten($gray-dark, 28), 0.5)
     ),  /* On top,    like z-index: 4; */
     url(../images/friends-highlight.jpg) center no-repeat   /* like z-index: 3; */
    ;
-    }
+
 
     .l-region--highlighted {
         padding: 1em 0;

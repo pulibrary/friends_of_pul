@@ -1,12 +1,4 @@
-.front .l-region--branding .block--allsearch-block-allsearch-search {
-    display: none;
-
-    @include breakpoint($tab) {
-        display: block;
-    }
-}
-
-.l-region--branding {
+.l-region--friends-branding {
     @include grid-span(12);
     display: block;
     margin: 0 auto;
@@ -16,8 +8,7 @@
     	margin-right: 0;
     }
 
-    .block--search-form,
-    .block--allsearch-block {
+    .block--search-form {
     	@include grid-span(12);
 		float:none;
 
@@ -26,15 +17,14 @@
 		  $search-bar-border: 1px solid $search-bar-border-color;
 		  $search-bar-background: lighten($search-bar-border-color, 10);
 
-		  position: relative; 
+		  position: relative;
 		  display: inline-block;
-		  margin-top:0.9em;
 		  width: 100%;
 
 		  input {
 		    box-sizing: border-box;
 		    display: inline-block;
-		    border: 1px #1a1f25 solid;
+		    border: 1px darken($gray-darkest,5) solid;
 		  }
 
 		  div.form-item-query, div.form-item {
@@ -43,7 +33,7 @@
 		    label {
 		    	@include visually-hidden();
 		    	color: $white;
-		    	
+
 		    	.form-required {
 		    		color: $white;
 		    	}
@@ -57,23 +47,20 @@
 		      font-style: italic;
 		      border-radius: em(4);
 		      margin: 0;
-		      background: lighten($gray-dark, 10);
-		      border: darken($gray-dark, 15);
+		      background: $white;
 		      color: #aaa;
-		      
+		      border: 1px darken($gray-darkest,5) solid;
+
 		      &:focus {
 				background: $white;
 				color: $black;
 		      }
 		    }
-	      
+
 		  }
 
 		  input[type=submit] {
-		  	display:none;
-		  } 
-		  button {
-		      background: darken($gray-darkest, 15);
+		      background: $gray-darkest;
 		      position: absolute;
 		      right: 0;
 		      top: 0;
@@ -81,7 +68,7 @@
 		      padding: 5px 10px;
 		      height: 28px;
 		      font-weight: normal;
-		      color: $gray-lighter;
+		      color: $white;
 		      border-top-left-radius: 0;
 		      border-bottom-left-radius: 0;
 		  }
@@ -91,5 +78,14 @@
 			@include grid-span(9,4);
 		}
     }
-    
+
+    .search-block-form > div {
+    	height: 90px;
+    	margin: 0;
+
+    	.container-inline {
+			@include vertical-align();
+    	}
+    }
+
 }
