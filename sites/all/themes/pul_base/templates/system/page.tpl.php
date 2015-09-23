@@ -76,7 +76,7 @@
     <div class="wrapper wrapper--branding">
       <section class="l-branding">
         <?php if ($logo): ?>
-          <h2><a href="<?php print $front_page; ?>" title="<?php print t('Princeton University Library - Home'); ?>"  class="site-logo"><img src="<?php print $logo; ?>" alt="<?php print t('Home'); ?>" /><span class="site-name"><?php print $site_name; ?></span></a></h2>
+          <h2><a href="http://library.princeton.edu" title="<?php print t('Princeton University Library - Home'); ?>"  class="site-logo"><img src="<?php print $logo; ?>" alt="<?php print t('Home'); ?>" /><span class="site-name">Princeton University Library</span></a></h2>
         <?php endif; ?>
         <?php print render($page['branding']); ?>
       </section>
