@@ -1,4 +1,4 @@
-.view-library-hours {
+.view-calendar {
 
 	.view-header {
 		border-top: none;
@@ -114,7 +114,7 @@
 	margin-left: 0;
 }
 
-.library-hours .date-nav-wrapper .date-prev a, 
+.library-hours .date-nav-wrapper .date-prev a,
 .library-hours .date-nav-wrapper .date-next a {
 	font-size: 18px;
 	padding: 0 0 0 0;
@@ -125,7 +125,7 @@
 	text-align: center;
 }
 
-.library-hours .date-nav-wrapper .date-next, 
+.library-hours .date-nav-wrapper .date-next,
 .library-hours .date-nav-wrapper .date-prev {
 	margin-top: 3px;
 	padding: 0px 4px;
@@ -153,10 +153,10 @@ div.view-content > table.views-table > tbody > tr > td {
 	}
 }
 
-.calendar-calendar td span.date-display-single, 
+.calendar-calendar td span.date-display-single,
 .calendar-calendar td span.date-display-start,
 .calendar-calendar td span.date-display-end {
-	
+
 	font-weight: normal;
 
 }
