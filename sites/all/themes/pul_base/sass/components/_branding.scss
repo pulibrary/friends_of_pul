@@ -107,6 +107,11 @@
 }
 
 .friends-branding {
+
+  .l-region--friends-branding p {
+    display:none;
+  }
+
   // non-SVG logo
   .friends-logo {
       line-height: 21px;
