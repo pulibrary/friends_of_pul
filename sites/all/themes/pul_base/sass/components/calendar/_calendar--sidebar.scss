@@ -9,7 +9,7 @@
     .date-nav-wrapper .date-next [class^="icon-"] {
         font-size: 1.7em;
     }
-    
+
     .view-content table {
         margin-top: 0;
     }
@@ -35,4 +35,8 @@
         display: none;
     }
 
+}
+
+.calendar-block h2 {
+  margin:0;
 }
