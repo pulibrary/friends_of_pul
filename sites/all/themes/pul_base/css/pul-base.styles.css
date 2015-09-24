@@ -1902,7 +1902,10 @@ div.view-content > table.views-table > tbody > tr > td p {
   display: none; }
 
 .calendar-block h2 {
-  margin: 0; }
+  margin-top: 0; }
+
+.calendar-block h2.node__title a {
+  font-size: .75em; }
 
 .front .view-library-hours thead {
   position: absolute;
