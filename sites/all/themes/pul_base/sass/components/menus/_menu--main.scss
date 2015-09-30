@@ -8,6 +8,7 @@
   $centered-navigation-background: $gray-light;
   $centered-navigation-color: transparentize($base-font-color, 0.3);
   $centered-navigation-color-hover: $orange;
+  $centered-navigation-color-active: $orange;
   $centered-navigation-height: 50px;
   $centered-navigation-item-padding: 1em;
   $centered-navigation-submenu-padding: 1em;
@@ -111,11 +112,15 @@
       }
     }
 
+    .active-trail {
+      color: $centered-navigation-color-active;
+      text-decoration: none;
+    }
+
     a {
       color: $centered-navigation-color;
       display: inline-block;
       // @include transition (all 0.2s ease-in-out);
-
 
       &:hover {
         color: $centered-navigation-color-hover;

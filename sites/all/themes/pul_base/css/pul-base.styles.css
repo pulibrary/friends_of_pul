@@ -2277,6 +2277,9 @@ ul.nice-menu.nice-menu-menu-collection-development-webs .menuparent a:hover {
         padding-left: 0; }
         .wrapper--navigation .centered-navigation-menu > ul > li a {
           padding-left: 1em; } }
+    .wrapper--navigation .centered-navigation-menu > ul > li .active-trail {
+      color: #E87411;
+      text-decoration: none; }
     .wrapper--navigation .centered-navigation-menu > ul > li a {
       color: rgba(0, 0, 0, 0.7);
       display: inline-block; }
