@@ -49,15 +49,11 @@ foreach ($day_names as $key => $value) {
         <tr>
           <?php foreach ($rows['singleday_buckets'] as $day): ?>
             <td class="calendar-agenda-items single-day <?php print $class; ?>">
-               <?php if (count($day)==0): ?>
-               		<div class="tba">&nbsp;</div>
-               <?php else: ?>
-               	<?php foreach($day as $theDay): ?>
-               		<?php foreach($theDay as $item): ?>
-                 		<?php print $item['entry'];?>
-               		<?php endforeach;?>
-               	<?php endforeach;?>
-               <?php endif;?>
+               <?php foreach($day as $theDay): ?>
+                <?php foreach($theDay as $item): ?>
+                  <?php print $item['entry'];?>
+                <?php endforeach;?>
+              <?php endforeach;?>
             </td>
           <?php endforeach; ?>
         </tr>
