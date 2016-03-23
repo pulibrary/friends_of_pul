@@ -1,0 +1,19 @@
+.front .wrapper--highlighted {
+  background: $highlighted-wrapper;
+  background-size: 1600px auto;
+  padding: 0;
+
+  @include breakpoint($tab) {
+    background: linear-gradient($highlighted-wrapper, $highlighted-wrapper), url("../images/bg-studyroom.jpg") center no-repeat;
+    background-size: cover;
+  }
+
+  .l-region--highlighted {
+    padding: 1em;
+    position: relative;
+
+    @include breakpoint($tab) {
+      padding: 3em 0;
+    }
+  }
+}

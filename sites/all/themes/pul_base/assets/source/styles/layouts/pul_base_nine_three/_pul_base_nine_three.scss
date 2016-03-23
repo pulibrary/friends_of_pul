@@ -1,0 +1,13 @@
+.panel-display--pul_base_nine_three {
+  @include clearfix;
+}
+
+@include breakpoint($tab) {
+  .pul_base_nine_three-region--first {
+    @include span(first 9);
+  }
+
+  .pul_base_nine_three-region--second {
+    @include span(last 3);
+  }
+}

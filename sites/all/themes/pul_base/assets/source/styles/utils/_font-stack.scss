@@ -1,0 +1,7 @@
+// For Pattern Lab
+// @include font-face(DejaVu Sans, "/fonts/DejaVu/DejaVuSansCondensed");
+// @include font-face(DejaVu Sans, "/fonts/DejaVu/DejaVuSansCondensed-Bold", bold);
+
+// For Drupal projects
+@include font-face(DejaVu Sans, "#{$base-path}/fonts/DejaVu/DejaVuSansCondensed");
+@include font-face(DejaVu Sans, "#{$base-path}/fonts/DejaVu/DejaVuSansCondensed-Bold", bold);

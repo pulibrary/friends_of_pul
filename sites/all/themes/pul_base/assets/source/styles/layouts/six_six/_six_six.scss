@@ -1,0 +1,13 @@
+.panel-display--six_six {
+  @include clearfix;
+}
+
+@include breakpoint($tab) {
+  .six_six-region--first {
+    @include span(first 6);
+  }
+
+  .six_six-region--second {
+    @include span(last 6);
+  }
+}
