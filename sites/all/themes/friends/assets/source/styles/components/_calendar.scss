@@ -1,0 +1,29 @@
+.calendar-block h2 {
+  margin-top: 0;
+}
+
+.calendar-block h2.node__title a {
+  font-size: 0.75em;
+}
+
+.single-day .no-entry.future:after {
+  content: "";
+}
+
+.view-calendar {
+  table {
+    border-spacing: 0;
+  }
+
+  .view-header {
+    border: 1px solid $black;
+  }
+
+  .month-view {
+    th.days {
+      padding: 10px 20px 10px 20px;
+      text-align: center;
+      width: calc(100% / 7);
+    }
+  }
+}

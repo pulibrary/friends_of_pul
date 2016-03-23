@@ -1,0 +1,25 @@
+.front .wrapper--highlighted {
+  background: linear-gradient($highlighted-wrapper-5, $highlighted-wrapper-5), url("#{$base-path}/images/friends-highlight.jpg") center no-repeat;
+  min-height: 300px;
+
+  h2 {
+    color: $white;
+    font-size: 3em;
+    text-align: center;
+    text-shadow: 0 1px 1px $black, 0 4px 3px $black-opacity-5, 0 8px 13px $black-opacity-2, 0 18px 23px $black-opacity-2;
+  }
+
+  .block__content {
+    display: none;
+  }
+}
+
+.block--views-spotlight-dispalsys-block {
+  @include breakpoint($desk) {
+    display: none;
+  }
+}
+
+.block--pudl-highlight {
+  display: none;
+}
