@@ -1,0 +1,25 @@
+.button--join-friends {
+  background-color: $blue-dark;
+  border-radius: 3px;
+  color: $white;
+  font-size: 1.25rem;
+  // font-weight: bold;
+  letter-spacing: 0.04em;
+  padding: 5px 12px;
+  text-transform: uppercase;
+
+  &:hover,
+  &:focus,
+  &:active {
+    background-color: darken($blue-dark, 5);
+    text-decoration: none;
+  }
+}
+
+footer .btn a {
+  @include button(flat, $orange-dark);
+
+  color: $white;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+}

@@ -1,0 +1,67 @@
+.l-region--footer {
+  clear: both;
+  color: lighten($gray-darkest, 7);
+  padding: 1em;
+
+  .btn a {
+    background: lighten($orange-dark, 10);
+    font-weight: normal;
+  }
+
+  .block--block {
+    @include span(12);
+
+    @include breakpoint($tab) {
+      @include span(3);
+    }
+  }
+
+  .block--block:first-child {
+    margin-left: 0;
+  }
+
+  .block--block:last-child {
+    margin-right: 0;
+  }
+
+  address,
+  .footer--copyright,
+  a {
+    color: lighten($gray-darkest, 7);
+    font-style: normal;
+  }
+
+  .footer--copyright {
+    margin-top: 0.5em;
+  }
+
+  h2,
+  h2 a {
+    color: $orange-dark;
+    font-size: 16px;
+    font-weight: bold;
+    margin-bottom: 0.75em;
+
+    &:hover {
+      text-decoration: none;
+    }
+  }
+
+  .leaf {
+    list-style: none;
+
+    a {
+      line-height: 1.75em;
+    }
+  }
+
+  .facebook-logo,
+  .twitter-logo {
+    height: 34px;
+    width: 34px;
+  }
+
+  .pu-logo {
+    margin-top: 0;
+  }
+}

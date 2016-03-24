@@ -1,0 +1,46 @@
+<?php
+
+/**
+ * @file
+ * Code for the tests of the Browsersync module.
+ */
+
+class BrowsersyncTests extends DrupalWebTestCase {
+
+  /**
+   * Metadata about our test case.
+   */
+  public static function getInfo() {
+    return array(
+      'name' => 'Browsersync',
+      'description' => 'Tests for the Browsersync module.',
+      'group' => 'Browsersync',
+    );
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public function setUp() {
+    parent::setUp(array('browsersync'));
+
+    // Create a dev user who can use Browsersync.
+    $this->dev_user = $this->drupalCreateUser(array('use browsersync'));
+    $this->drupalLogin($this->dev_user);
+
+    // Enable Browsersync globally.
+    $theme_settings = variable_get('theme_settings', array());
+    $theme_settings['browsersync_enabled'] = TRUE;
+    variable_set('theme_settings', $theme_settings);
+  }
+
+  /**
+   * Checks for the presence of the snippet in the markup.
+   */
+  public function testSnippet() {
+    $this->drupalGet('<front>');
+    $elements = $this->xpath('//script[@id=:id]', array(':id' => '__bs_script__'));
+    $this->assertTrue(!empty($elements), 'Page contains the Browsersync snippet.');
+  }
+
+}

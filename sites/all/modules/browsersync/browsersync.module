@@ -1,0 +1,179 @@
+<?php
+
+/**
+ * @file
+ * Code for the Browsersync module.
+ */
+
+/**
+ * Browsersync default host.
+ *
+ * @link http://www.browsersync.io/docs/options/#option-host
+ */
+define('BROWSERSYNC_DEFAULT_HOST', 'HOST');
+
+/**
+ * Browsersync default port.
+ *
+ * @link http://www.browsersync.io/docs/options/#option-port
+ */
+define('BROWSERSYNC_DEFAULT_PORT', '3000');
+
+/**
+ * Implements hook_permission().
+ */
+function browsersync_permission() {
+  return array(
+    'use browsersync' => array(
+      'title' => t('Use Browsersync'),
+    ),
+  );
+}
+
+/**
+ * Implements hook_theme().
+ */
+function browsersync_theme($existing, $type, $theme, $path) {
+  return array(
+    'browsersync_snippet' => array(
+      'variables' => array(
+        'host' => '',
+        'port' => '',
+      ),
+      'file' => 'browsersync.theme.inc',
+      'path' => $path . '/theme',
+      'template' => 'browsersync-snippet',
+    ),
+  );
+}
+
+/**
+ * Implements hook_css_alter().
+ *
+ * Browsersync does not work with CSS import so we need to force Drupal to embed
+ * CSS files as <link> elements.
+ *
+ * @link https://github.com/shakyShane/browser-sync/issues/10
+ */
+function browsersync_css_alter(&$css) {
+  if (browsersync_get_setting('enabled', FALSE) && !variable_get('preprocess_css')) {
+    foreach ($css as $key => $value) {
+      // Skip core files.
+      $is_core = (strpos($value['data'], 'misc/') === 0 || strpos($value['data'], 'modules/') === 0);
+      if (!$is_core && file_exists($value['data'])) {
+        $css[$key]['preprocess'] = FALSE;
+      }
+    }
+  }
+}
+
+/**
+ * Implements hook_form_system_theme_settings_alter().
+ *
+ * Adds the Browsersync configuration options to the theme settings form.
+ *
+ * @see system_theme_settings()
+ */
+function browsersync_form_system_theme_settings_alter(&$form, &$form_state, $form_id) {
+  // Extract the theme key from the form arguments. If not present, it means
+  // that we are altering the global theme settings form.
+  $args = $form_state['build_info']['args'];
+  $theme_key = !empty($args[0]) ? $args[0] : NULL;
+
+  $form['browsersync'] = array(
+    '#type' => 'fieldset',
+    '#title' => 'Browsersync settings',
+    '#collapsible' => TRUE,
+    '#collapsed' => TRUE,
+  );
+
+  $form['browsersync']['browsersync_enabled'] = array(
+    '#title' => 'Enable Browsersync',
+    '#type' => 'checkbox',
+    '#default_value' => browsersync_get_setting('enabled', FALSE, $theme_key),
+  );
+
+  $form['browsersync']['settings'] = array(
+    '#type' => 'container',
+    '#states' => array(
+      'visible' => array(
+        'input[name="browsersync_enabled"]' => array('checked' => TRUE),
+      ),
+    ),
+  );
+
+  $form['browsersync']['settings']['browsersync_host'] = array(
+    '#title' => 'Host',
+    '#type' => 'textfield',
+    '#description' => t('Override host detection if you know the correct IP to use.'),
+    '#default_value' => browsersync_get_setting('host', '', $theme_key),
+  );
+
+  $form['browsersync']['settings']['browsersync_port'] = array(
+    '#title' => 'Port',
+    '#type' => 'textfield',
+    '#description' => t('Use a specific port (instead of the one auto-detected by Browsersync).'),
+    '#default_value' => browsersync_get_setting('port', '', $theme_key),
+  );
+}
+
+/**
+ * Implements hook_page_build().
+ *
+ * Adds the Browsersync snippet to the bottom of the page.
+ */
+function browsersync_page_build(&$page) {
+  if (browsersync_get_setting('enabled', FALSE) && user_access('use browsersync')) {
+    $page['page_bottom']['browsersync'] = array(
+      '#theme' => 'browsersync_snippet',
+      '#host' => browsersync_get_setting('host', ''),
+      '#port' => browsersync_get_setting('port', ''),
+      '#weight' => 100,
+    );
+  }
+}
+
+/**
+ * Retrieves a setting for the current theme or for a given theme.
+ *
+ * @param string $setting_name
+ *   The name of the setting to be retrieved.
+ * @param mixed $default
+ *   (optional) A default value. Defaults to NULL.
+ * @param string $theme
+ *   (optional) The name of a given theme. Defaults to the current theme.
+ *
+ * @return mixed
+ *   The value of the requested setting, or the $default value if the setting
+ *   does not exist.
+ *
+ * @see theme_get_setting()
+ */
+function browsersync_get_setting($setting_name, $default = NULL, $theme = NULL) {
+  $cache = &drupal_static('theme_get_setting', array());
+
+  // If no key is given, use the current theme if we can determine it.
+  if (!isset($theme)) {
+    $theme = !empty($GLOBALS['theme_key']) ? $GLOBALS['theme_key'] : '';
+  }
+
+  // Prefix the setting name with the module's namespace.
+  $setting_name = 'browsersync_' . $setting_name;
+
+  if (empty($cache[$theme])) {
+    // If the cache has not been filled yet, invoke theme_get_setting to
+    // retrieve the value. This will populate the cache and make it available
+    // for subsequent requests.
+    $setting = theme_get_setting($setting_name, $theme);
+  }
+  elseif (isset($cache[$theme][$setting_name])) {
+    // Retrieve the value from the cache.
+    $setting = $cache[$theme][$setting_name];
+  }
+  else {
+    // Use the default value, setting does not exist.
+    $setting = $default;
+  }
+
+  return $setting;
+}

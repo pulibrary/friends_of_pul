@@ -1,0 +1,13 @@
+.front .panel-display--three_six_three_stacked {
+  padding-top: 2em;
+}
+
+.front .wrapper--highlighted {
+  .l-region--highlighted {
+    padding: 6em 0;
+  }
+
+  h2 {
+    @include vertical-align;
+  }
+}

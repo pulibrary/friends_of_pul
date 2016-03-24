@@ -6,6 +6,25 @@
  * pul_base theme.
  */
 
+function pul_base_css_alter(&$css) {
+
+  // list of css files to be excluded from display
+  $exclude = array(
+    'sites/all/themes/omega/omega/css/modules/comment/comment.theme.css' => FALSE,
+    'sites/all/themes/omega/omega/css/modules/system/system.theme.css' => FALSE,
+    'sites/all/modules/calendar/css/calendar_multiday.css' => FALSE,
+    'sites/all/modules/calendar/css/calendar-overlap-no-scroll.css' => FALSE,
+    'sites/all/modules/calendar/css/calendar-overlap.css' => FALSE,
+    'sites/all/modules/calendar/css/calendar.css' => FALSE,
+    'sites/all/modules/date/date_api/date.css' => FALSE,
+    'sites/all/modules/date/date_popup/themes/datepicker.1.7.css' => FALSE,
+    'sites/all/modules/date/date_repeat_field/date_repeat_field.css' => FALSE,
+    'sites/all/modules/date/date_views/css/date_views.css' => FALSE,
+    'sites/all/modules/office_hours/office_hours.css' => FALSE,
+    'sites/all/modules/panels/plugins/layouts/twocol/twocol.css' => FALSE,
+  );
+  $css = array_diff_key($css, $exclude);
+}
 
 function pul_base_date_nav_title($params) {
     $granularity = $params['granularity'];
@@ -118,15 +137,4 @@ function pul_base_form_alter(&$form, &$form_state, $form_id) {
             break;
     }
 
-}
-
-function pul_base_page_alter(&$page)
-{
-  if (arg(0) == 'search')
-  {
-    if (!empty($page['content']['system_main']['search_form']))
-    {
-      hide($page['content']['system_main']['search_form']);
-    }
-  }
 }

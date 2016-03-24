@@ -1,0 +1,13 @@
+$susy: (
+  output: float,
+  container: 1200px,
+  columns: 12,
+  gutters: 0.6,
+  global-box-sizing: border-box,
+  debug: (
+    image: show,
+    color: $aqua-dark,
+    output: overlay,
+    toggle: top right,
+  ),
+);

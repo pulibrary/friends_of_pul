@@ -2,7 +2,7 @@
 
 /**
  * @file
- * Defines a 4-5-3 three column grid layout with top and bottom full 
+ * Defines a 4-5-3 three column grid layout with top and bottom full
  * width regions.
  */
 
@@ -12,7 +12,7 @@ $plugin = array(
   'icon' => 'four-five-three-stacked.png',
   'category' => t('Pul Content content layouts'),
   'theme' => 'four_five_three_stacked',
-  'css' => '../../../css/pul-base.layouts.css',
+  'css' => '../../../assets/public/styles/pul-base.styles.min.css',
   'regions' => array(
     'top' => t('Top'),
     'first' => t('First'),

@@ -1,0 +1,131 @@
+$logo-height: 35px; // large = 50px; small = 35px;
+
+.wrapper--branding {
+  background-color: $gray-darkest;
+  border-bottom: 1px solid darken($gray-dark, 3);
+  border-top: 5px solid $orange;
+  min-height: $logo-height;
+
+  h2 {
+    display: inline-block;
+    height: $logo-height;
+    margin: 0;
+    width: 100%;
+
+    @include breakpoint($tab) {
+      width: 375px;
+    }
+
+    .site-logo {
+      @include vertical-align;
+
+      height: $logo-height / 1.7;
+      width: auto;
+    }
+  }
+
+  .site-name {
+    display: none;
+  }
+}
+
+.svg .site-logo {
+  @include breakpoint($tab) {
+    margin-left: 0.5em;
+  }
+}
+
+// Friends stuff
+.wrapper--site-branding {
+  background: $gray-dark;
+  border-bottom: $gray-light 1px solid;
+  min-height: 90px;
+}
+
+.friends-branding {
+  height: 90px;
+  margin: 0 auto;
+  max-width: 1200px;
+
+  h2 {
+    @include span(12);
+
+    @include vertical-align;
+
+    clear: both;
+    height: 90px;
+    margin: 0;
+    text-align: center;
+
+    @include breakpoint($tab) {
+      @include span(7 first);
+
+      margin-left: 0;
+      text-align: left;
+    }
+  }
+
+  .l-region.l-region--friends-branding {
+    @include span(12)
+    @include vertical-align;
+    padding: 0 1em;
+
+    @include breakpoint($tab) {
+      @include span(5 last);
+    }
+  }
+
+  .element-invisible {
+    @include visually-hidden;
+  }
+}
+
+// non-SVG logo
+.friends-logo {
+  @include vertical-align;
+
+  clear: both;
+  height: 90px;
+  line-height: 21px;
+  margin-left: -0.7em;
+
+  &:before {
+    content: "";
+    display: inline-block;
+    height: 100%;
+    vertical-align: middle;
+  }
+
+  img {
+    display: inline-block;
+    margin: 0 auto;
+    padding: 0 1em;
+    vertical-align: middle;
+
+    @include breakpoint($desk) {
+      margin: 0;
+      padding: 0;
+    }
+  }
+}
+
+// SVG logo
+.svg {
+  .friends-logo img {
+    display: none;
+  }
+
+  .friends-logo {
+    background: url("#{$base-path}/images/friends-of-library.svg") center center no-repeat;
+    background-size: cover;
+    display: inline-block;
+    height: 50px;
+    margin: 0;
+    padding-top: 30px;
+    width: 310px;
+
+    @include breakpoint($tab) {
+      margin-left: 0;
+    }
+  }
+}

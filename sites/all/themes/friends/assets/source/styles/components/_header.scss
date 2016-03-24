@@ -1,0 +1,62 @@
+.l-region--friends-branding {
+  .block--search-form {
+    form > div {
+      margin-top: initial;
+
+      input {
+        border: 1px darken($gray-darkest, 5) solid;
+      }
+
+      input[type=text] {
+        background: $white;
+        border: 1px darken($gray-darkest, 5) solid;
+      }
+
+      input[type=submit] {
+        background: $gray-darkest;
+      }
+
+      button {
+        color: $white;
+      }
+    }
+  }
+
+  .search-block-form > div {
+    height: 90px;
+    margin: 0;
+
+    .container-inline {
+      @include vertical-align;
+    }
+  }
+}
+
+.wrapper--navigation {
+  border-bottom: 1px solid darken($gray-lightest, 5);
+}
+
+.wrapper--navigation .centered-navigation-menu > ul > li .active-trail {
+  color: $orange;
+  text-decoration: none;
+}
+
+.wrapper--navigation .centered-navigation-menu > ul > li.expanded {
+  padding-right: 0;
+}
+
+.l-region--friends-branding .block--search-form form > div div.form-item input[type=text] {
+  height: 28px;
+  width: 100%;
+}
+
+.l-region--friends-branding .block--search-form form > div input[type=submit] {
+  border-bottom-left-radius: 0;
+  border-top-left-radius: 0;
+  height: 28px;
+  outline: none;
+  padding: 3px 10px;
+  position: absolute;
+  right: 0;
+  top: 0;
+}
