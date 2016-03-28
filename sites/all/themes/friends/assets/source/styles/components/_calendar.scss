@@ -6,6 +6,10 @@
   font-size: 0.75em;
 }
 
+.calendar-block .node__content {
+  margin-bottom: 1em;
+}
+
 .single-day .no-entry.future:after {
   content: "";
 }
@@ -21,9 +25,36 @@
 
   .month-view {
     th.days {
-      padding: 10px 20px 10px 20px;
+      padding: 10px 20px;
       text-align: center;
       width: calc(100% / 7);
     }
   }
+
+  .views-field-field-start-datetime {
+    margin-bottom: 0.5em;
+  }
+
+  .event-group a:hover,
+  .event-group a:focus,
+  .legend a:hover,
+  .legend a:focus {
+    text-decoration: none;
+  }
+
+  .label {
+    background: $aqua-light;
+    border-radius: 3px;
+    font-size: 0.8em;
+    padding: 2px 5px;
+
+    &--1 {
+      background: $yellow-light;
+    }
+  }
+}
+
+.legend {
+  float: right;
+  margin: 1em;
 }
