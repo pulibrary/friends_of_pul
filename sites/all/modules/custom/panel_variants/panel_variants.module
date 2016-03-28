@@ -1,0 +1,7 @@
+<?php
+/**
+ * @file
+ * Code for the Panel variants feature.
+ */
+
+include_once 'panel_variants.features.inc';
