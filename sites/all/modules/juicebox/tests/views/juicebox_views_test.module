@@ -1,0 +1,33 @@
+<?php
+
+
+/**
+ * @file
+ * This is a helper module to implement some hooks during automated testing.
+ */
+
+
+/**
+ * Implements hook_views_api().
+ */
+function juicebox_views_test_views_api() {
+  return array(
+    'api' => 3.0,
+  );
+}
+
+/**
+ * Implements hook_views_default_views().
+ */
+function juicebox_views_test_views_default_views() {
+  // Traverse the files in the default_views subdir and load any view dfinitions
+  // found there.
+  $files = file_scan_directory(drupal_get_path('module', 'juicebox_views_test') . '/default_views', '/\.view/');
+  foreach ($files as $absolute => $file) {
+    require $absolute;
+    if (isset($view)) {
+      $views[$file->name] = $view;
+    }
+  }
+  return $views;
+}

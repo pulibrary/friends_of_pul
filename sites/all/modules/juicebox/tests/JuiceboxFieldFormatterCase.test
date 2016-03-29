@@ -1,0 +1,134 @@
+<?php
+
+/**
+ * @file
+ * Test case for Juicebox field formatter.
+ */
+
+/**
+ * Class to define test case for Juicebox field formatter.
+ */
+class JuiceboxFieldFormatterCase extends JuiceboxBaseCase {
+
+  /**
+   * Define test case info.
+   */
+  public static function getInfo() {
+    return array(
+      'name' => 'Juicebox field formatter tests',
+      'description' => 'Tests the Juicebox field formatter.',
+      'group' => 'Juicebox',
+    );
+  }
+
+  /**
+   * Define setup tasks.
+   */
+  public function setUp() {
+    parent::setUp('juicebox');
+    // Create and login user.
+    $this->webUser = $this->drupalCreateUser(array('access content', 'access administration pages', 'administer site configuration', 'administer content types', 'administer nodes', 'create article content', 'edit any article content', 'delete any article content', 'administer image styles', 'search content', 'access contextual links'));
+    $this->drupalLogin($this->webUser);
+    // Prep an article with an image field and activate the Juicebox display
+    // formatter for it.
+    $this->prepArticle();
+    $this->activateJuiceboxFieldFormatter($this->instance);
+  }
+
+  /**
+   * Test base logic for the Juicebox field formatter.
+   */
+  public function testFieldFormatter() {
+    $instance = $this->instance;
+    $node = $this->node;
+    $xml_path = 'juicebox/xml/field/node/' . $node->nid . '/' . $instance['field_name'] . '/full';
+    // Get the urls to the test image and thumb derivative used by default. Note
+    // that the "large" style will be used for the article's field_image because
+    // that's was its formatter was set to before being flipped into a Juicebox
+    // display.
+    $item = reset(field_get_items('node', $node, $instance['field_name']));
+    $test_image_url = image_style_url('large', $item['uri']);
+    $test_thumb_url = image_style_url('juicebox_square_thumbnail', $item['uri']);
+    // Check for correct embed markup.
+    $this->drupalGet('node/' . $node->nid);
+    $this->assertRaw(trim(json_encode(array('configUrl' => url($xml_path))), '{}"'), 'Gallery setting found in Drupal.settings.');
+    $this->assertRaw('id="field--node--' . $node->nid . '--' . str_replace('_', '-', $instance['field_name']) . '--full"', 'Embed code wrapper found.');
+    $this->assertRaw('<li class="gallery_config', 'Example contextual link for gallery configuration found.');
+    $this->assertRaw(check_plain($test_image_url), 'Test image found in embed code');
+    // Check for correct XML.
+    $this->drupalGet($xml_path);
+    $this->assertRaw('<?xml version="1.0" encoding="UTF-8"?>', 'Valid XML detected.');
+    $this->assertRaw('imageURL="' . check_plain($test_image_url), 'Test image found in XML.');
+    $this->assertRaw('thumbURL="' . check_plain($test_thumb_url), 'Test thumbnail found in XML.');
+  }
+
+  /**
+   * Test configuration options that are specific to the Juicebox field
+   * formatter.
+   */
+  public function testFieldFormatterConf() {
+    $instance = $this->instance;
+    $node = $this->node;
+    // Alter field formatter specific settings to contain custom values.
+    $this->drupalPostAJAX('admin/structure/types/manage/' . $instance['bundle'] . '/display', array(), $instance['field_name'] . '_formatter_settings_edit', NULL, array(), array(), 'field-ui-display-overview-form');
+    $edit = array(
+      'fields[' . $instance['field_name'] . '][settings_edit_form][settings][image_style]' => '',
+      'fields[' . $instance['field_name'] . '][settings_edit_form][settings][thumb_style]' => 'thumbnail',
+      'fields[' . $instance['field_name'] . '][settings_edit_form][settings][caption_source]' => 'alt',
+      'fields[' . $instance['field_name'] . '][settings_edit_form][settings][title_source]' => 'title',
+    );
+    $this->drupalPost(NULL, $edit, t('Save'));
+    $this->assertText(t('Your settings have been saved.'), 'Gallery configuration changes saved.');
+    // Get the urls to the image and thumb derivatives expected.
+    $item = reset(field_get_items('node', $node, $instance['field_name']));
+    $test_formatted_image_url = file_create_url($item['uri']);
+    $test_formatted_thumb_url = image_style_url('thumbnail', $item['uri']);
+    // Check for correct embed markup.
+    $this->drupalGet('node/' . $node->nid);
+    $this->assertRaw(check_plain($test_formatted_image_url), 'Test styled image found in embed code');
+    // Check for correct XML.
+    $this->drupalGet('juicebox/xml/field/node/' . $node->nid . '/' . $instance['field_name'] . '/full');
+    $this->assertRaw('imageURL="' . check_plain($test_formatted_image_url), 'Test styled image found in XML.');
+    $this->assertRaw('thumbURL="' . check_plain($test_formatted_thumb_url), 'Test styled thumbnail found in XML.');
+    // Note the intended title and caption text does not contain any block-level
+    // tags as long as the global title and caption output filter is working.
+    // So this acts as a test for that feature as well.
+    $this->assertRaw('<title><![CDATA[Some title text for field ' . $instance['field_name'] . ' on node ' . $node->nid . ']]></title>', 'Image title text found in XML');
+    $this->assertRaw('<caption><![CDATA[Some alt text for field ' . $instance['field_name'] . ' on node ' . $node->nid . ' &lt;strong&gt;with formatting&lt;/strong&gt;]]></caption>', 'Image caption text found in XML');
+    // Now that we have title and caption data set, also ensure this text can
+    // be found in search results. First we update the search index by marking
+    // our test node as dirty and running cron.
+    $this->drupalPost('node/' . $node->nid . '/edit', NULL, t('Save'));
+    $this->cronRun();
+    $this->drupalPost('search', array('keys' => '"Some title text"'), t('Search'));
+    $this->assertText('Test Juicebox Gallery Node', 'Juicebox node found in search for title text.');
+    // The Juicebox javascript should have been excluded from the search results
+    // page.
+    $this->assertNoRaw('"configUrl":"', 'Juicebox Drupal.settings vars not included on search result page.');
+  }
+
+  /**
+   * Test access to the Juicebox XML for the field formatter.
+   */
+  public function testFieldFormatterAccess() {
+    $instance = $this->instance;
+    $node = $this->node;
+    // Begin testing as an anon user.
+    $this->drupalLogout();
+    // The XML should be initially accessible (control test).
+    $this->drupalGet('juicebox/xml/field/node/' . $node->nid . '/' . $instance['field_name'] . '/full');
+    $this->assertRaw('<?xml version="1.0" encoding="UTF-8"?>', 'XML access allowed to published node (valid XML detected).');
+    // Now unpublish the node as a way of making it inaccessible to
+    // non-privileged users. There are unlimited ways that access can be
+    // restricted, such as other perm settings, contrb module controls for
+    // entities (node_access, tac, etc.), contrb module controls for fields
+    // (field_permissions), etc. We can't test them all here, but we can run
+    // this basic check to ensure that XML access restrictions kick-in.
+    $node->status = 0;
+    node_save($node);
+    // Re-check access.
+    $this->drupalGet('juicebox/xml/field/node/' . $node->nid . '/' . $instance['field_name'] . '/full');
+    $this->assertResponse(403, 'XML access blocked for unpublished node.');
+  }
+
+}

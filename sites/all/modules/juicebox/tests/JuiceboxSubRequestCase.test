@@ -1,0 +1,73 @@
+<?php
+
+/**
+ * @file
+ * Test case for XML generation based on a sub-request.
+ */
+
+/**
+ * Class to define test case for XML generation based on a sub-request.
+ */
+class JuiceboxSubRequestCase extends JuiceboxBaseCase {
+
+  /**
+   * Define test case info.
+   */
+  public static function getInfo() {
+    return array(
+      'name' => 'Juicebox sub-request tests',
+      'description' => 'Tests the Juicebox XML generation via a sub-request.',
+      'group' => 'Juicebox',
+      'dependencies' => array('views'),
+    );
+  }
+
+  /**
+   * Define setup tasks.
+   */
+  public function setUp() {
+    parent::setUp('juicebox', 'views', 'juicebox_views_test');
+    // Create and login user.
+    $this->webUser = $this->drupalCreateUser(array('access content', 'access administration pages', 'administer site configuration', 'administer content types', 'administer nodes', 'create article content', 'edit any article content', 'delete any article content', 'administer image styles', 'administer views', 'access contextual links'));
+    $this->drupalLogin($this->webUser);
+    // Prep an article with an image field. All our views will list article
+    // content or file data sourced from it.
+    $this->prepArticle();
+  }
+
+  /**
+   * Test a gallery embedded in a view row that is dependent on a sub-request
+   * when fetching the XML.
+   */
+  public function testSubRequestDependent() {
+    $instance = $this->instance;
+    $node = $this->node;
+    $xml_path = 'juicebox/xml/field/node/' . $node->nid . '/' . $instance['field_name'] . '/unknown';
+    // Get the urls to the test image and thumb derivative used by default.
+    $item = reset(field_get_items('node', $this->node, $this->instance['field_name']));
+    $test_image_url = image_style_url('juicebox_medium', $item['uri']);
+    $test_thumb_url = image_style_url('juicebox_square_thumbnail', $item['uri']);
+    // Check for correct embed markup.
+    $content = $this->drupalGet('juicebox-test-row-formatter');
+    $this->assertRaw(trim(json_encode(array('configUrl' => url($xml_path))), '{}"'), 'Gallery setting found in Drupal.settings.');
+    $this->assertRaw('id="field--node--' . $node->nid . '--field-image--unknown"', 'Embed code wrapper found.');
+    $this->assertRaw(check_plain($test_image_url), 'Test image found in embed code');
+    // Extract the xml-source values from the XML.
+    $matches = array();
+    // In the pattern below we have to use four (yeah, FOUR) backslashes to
+    // match a SINGLE literal backslash. Our source will contain an encoded
+    // (JSON) "&" character as "\u0026", but we don't want the regex to confuse
+    // that with an actaul "&" char in the pattern itself.
+    preg_match('/xml-source-path=([a-z1-9-]+)\\\\u0026xml-source-id=([a-z1-9-]+)/', $content, $matches);
+    $this->assertNotNull($matches[1], 'xml-source-path value found in Drupal.settings.');
+    $this->assertNotNull($matches[2], 'xml-source-id value found in Drupal.settings.');
+    // Check for correct XML. This example is dependent on a sub-request XML
+    // lookup, so everything below would fail without that feature.
+    $this->drupalGet($xml_path, array('query' => array('xml-source-path' => $matches[1], 'xml-source-id' => $matches[2])));
+    $this->assertRaw('<?xml version="1.0" encoding="UTF-8"?>', 'Valid XML detected.');
+    $this->assertRaw('imageURL="' . check_plain($test_image_url), 'Test image found in XML.');
+    $this->assertRaw('thumbURL="' . check_plain($test_thumb_url), 'Test thumbnail found in XML.');
+    $this->assertRaw('backgroundcolor="green"', 'Custom background setting from pseudo field instance config found in XML.');
+  }
+
+}

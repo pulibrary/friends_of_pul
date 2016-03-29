@@ -1,0 +1,115 @@
+<?php
+
+
+/**
+ * @file
+ * Install, update and uninstall functions for the Juicebox module.
+ */
+
+
+/**
+ * Implements hook_requirements().
+ */
+function juicebox_requirements($phase) {
+  $requirements = array();
+  $t = get_t();
+  // Check on the installation status of the Juicebox library. Note that
+  // we do not do this check during the 'install' phase as the libraries API
+  // functions will not always be available then (if installing Drupal via an
+  // install profile, etc.).
+  if ($phase == 'runtime') {
+    // Get locally installed library details.
+    $library = juicebox_library_detect(TRUE, TRUE);
+    $requirements['juicebox'] = array(
+      'title' => $t('Juicebox Javascript Library'),
+    );
+    if ($library['installed']) {
+      $requirements['juicebox']['value'] = $library['version'];
+      $requirements['juicebox']['severity'] = REQUIREMENT_OK;
+    }
+    else {
+      $requirements['juicebox']['value'] = $library['error'];
+      $requirements['juicebox']['description'] = $library['error message'];
+      $requirements['juicebox']['severity'] = REQUIREMENT_ERROR;
+    }
+    // Add notice about incompatibility with devel_themer.
+    if (module_exists('devel_themer')) {
+      $requirements['juicebox_devel_themer'] = array(
+        'title' => 'Juicebox Compatibility',
+        'value' => 'Theme Developer module is enabled',
+        'description' => t('The Juicebox module is not compatible with the Theme Developer module. Your Juicebox galleries may not display correctly until the Theme Developer module has been disabled.'),
+        'severity' => REQUIREMENT_ERROR,
+      );
+    }
+    // Add notice about the fact that all logic from the juicebox_xml_cache
+    // module has been added this module.
+    if (module_exists('juicebox_xml_cache')) {
+      $requirements['juicebox_xml_cache'] = array(
+        'title' => 'Juicebox Compatibility',
+        'value' => 'Juicebox XML cache module obsolete',
+        'description' => t('The Juicebox XML Cache (sandbox) module is now obsolete. That module\'s primary functionality has been added to the main Juicebox module (as of version 7.x-2.1 of Juicebox) and is no longer needed. Please uninstall the Juicebox XML Cache module.'),
+        'severity' => REQUIREMENT_ERROR,
+      );
+    }
+  }
+  return $requirements;
+}
+
+
+/**
+ * Implements hook_uninstall().
+ */
+function juicebox_uninstall() {
+  // Remove global Juicebox variables.
+  variable_del('juicebox_js_scope');
+  variable_del('juicebox_apply_markup_filter');
+  variable_del('juicebox_enable_cors');
+  variable_del('juicebox_translate_interface');
+  variable_del('juicebox_translate_base_languagelist');
+  variable_del('juicebox_show_debug_links');
+  variable_del('juicebox_multisize_small');
+  variable_del('juicebox_multisize_medium');
+  variable_del('juicebox_multisize_large');
+}
+
+
+/**
+ * Update registry and cache details to ensure that Juicebox galleries made with
+ * beta versions of the module are compatible with post-beta versions.
+ */
+function juicebox_update_7100() {
+  // Empty update to force a rebuild of the cache/registry. We have added a new
+  // theme variable for 'juicebox_embed_markup' ('gallery_id') and have
+  // re-structured the "schema" for configuration variables. For the schema
+  // change, clearing the cache will enforce correct default values but we also
+  // have added some "real-time" handling for manually configured values in
+  // _juicebox_init_display_settings().
+}
+
+
+/**
+ * Update registry and cache details to accomodate new theme variables.
+ */
+function juicebox_update_7101() {
+  // Empty update to force a rebuild of the cache/registry. We have changed
+  // some theme variable names ("jlib_options" and "settings").
+}
+
+
+/**
+ * Update registry and cache details to accomodate new OOP codebase.
+ */
+function juicebox_update_7200() {
+  // Empty update to force a rebuild of the cache/registry. We have changed
+  // many structures which require clean caches.
+}
+
+
+/**
+ * Update registry and cache details to accomodate refactored class names and
+ * test additions.
+ */
+function juicebox_update_7201() {
+  // Empty update to force a rebuild of the cache/registry. We have changed
+  // many structures which require clean caches.
+}

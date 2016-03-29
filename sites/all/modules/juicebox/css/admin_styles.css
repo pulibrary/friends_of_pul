@@ -1,0 +1,23 @@
+/* Styles for contextual links - move to extreme upper corner */
+.juicebox-parent.contextual-links-region .contextual-links-wrapper {
+  right: 0;
+  top: 0;
+}
+
+/* Styles for Juicebox gallery placeholders (debug info boxes, etc.) */
+.juicebox-placeholder {
+  border: 1px solid #777;
+  padding: 1.5em;
+}
+.juicebox-debug-info dt {
+  font-weight: bold;
+  margin: 0.5em 0em;
+}
+.juicebox-debug-info dd ul {
+  margin: 0;
+  padding: 0;
+}
+.juicebox-debug-info dd li {
+  list-style: none;
+  list-style-position: inside;
+}
