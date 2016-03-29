@@ -532,6 +532,31 @@ events',
     $pane->uuid = 'e6fe2a7e-6700-448e-bc40-2d92d2a0a169';
     $display->content['new-e6fe2a7e-6700-448e-bc40-2d92d2a0a169'] = $pane;
     $display->panels['second'][0] = 'new-e6fe2a7e-6700-448e-bc40-2d92d2a0a169';
+    $pane = new stdClass();
+    $pane->pid = 'new-b599728a-8f5a-445f-8e41-0801eeb96651';
+    $pane->panel = 'top';
+    $pane->type = 'custom';
+    $pane->subtype = 'custom';
+    $pane->shown = TRUE;
+    $pane->access = array();
+    $pane->configuration = array(
+      'admin_title' => 'Student Friends Banner',
+      'title' => '',
+      'body' => '<p><img src="/sites/all/themes/friends/assets/public/images/student-friends.jpg" alt="Student Friends of the Princeton University Library" /></p>',
+      'format' => 'full_html',
+      'substitute' => 1,
+    );
+    $pane->cache = array();
+    $pane->style = array(
+      'settings' => NULL,
+    );
+    $pane->css = array();
+    $pane->extras = array();
+    $pane->position = 0;
+    $pane->locks = array();
+    $pane->uuid = 'b599728a-8f5a-445f-8e41-0801eeb96651';
+    $display->content['new-b599728a-8f5a-445f-8e41-0801eeb96651'] = $pane;
+    $display->panels['top'][0] = 'new-b599728a-8f5a-445f-8e41-0801eeb96651';
   $display->hide_title = PANELS_TITLE_FIXED;
   $display->title_pane = 'new-120eef27-73e7-41a2-bbc1-1de882dcf0c3';
   $handler->conf['display'] = $display;
