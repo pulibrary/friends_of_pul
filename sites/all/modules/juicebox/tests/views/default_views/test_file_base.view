@@ -1,0 +1,53 @@
+<?php
+$view = new view();
+$view->name = 'juicebox_views_file_test';
+$view->description = '';
+$view->tag = 'default';
+$view->base_table = 'file_managed';
+$view->human_name = 'juicebox_views_file_test';
+$view->core = 7;
+$view->api_version = '3.0';
+$view->disabled = FALSE; /* Edit this to true to make a default view disabled initially */
+
+/* Display: Master */
+$handler = $view->new_display('default', 'Master', 'default');
+$handler->display->display_options['title'] = 'juicebox_views_file_test';
+$handler->display->display_options['use_more_always'] = FALSE;
+$handler->display->display_options['access']['type'] = 'perm';
+$handler->display->display_options['cache']['type'] = 'none';
+$handler->display->display_options['query']['type'] = 'views_query';
+$handler->display->display_options['exposed_form']['type'] = 'basic';
+$handler->display->display_options['pager']['type'] = 'some';
+$handler->display->display_options['pager']['options']['items_per_page'] = '0';
+$handler->display->display_options['pager']['options']['offset'] = '0';
+$handler->display->display_options['style_plugin'] = 'juicebox';
+$handler->display->display_options['style_options']['image_field'] = 'fid';
+$handler->display->display_options['style_options']['thumb_field'] = 'fid';
+$handler->display->display_options['style_options']['title_field'] = 'filename';
+/* Field: File: Name */
+$handler->display->display_options['fields']['filename']['id'] = 'filename';
+$handler->display->display_options['fields']['filename']['table'] = 'file_managed';
+$handler->display->display_options['fields']['filename']['field'] = 'filename';
+$handler->display->display_options['fields']['filename']['label'] = '';
+$handler->display->display_options['fields']['filename']['alter']['word_boundary'] = FALSE;
+$handler->display->display_options['fields']['filename']['alter']['ellipsis'] = FALSE;
+/* Field: File: File ID */
+$handler->display->display_options['fields']['fid']['id'] = 'fid';
+$handler->display->display_options['fields']['fid']['table'] = 'file_managed';
+$handler->display->display_options['fields']['fid']['field'] = 'fid';
+
+/* Display: Base File */
+$handler = $view->new_display('page', 'Base File', 'page');
+$handler->display->display_options['path'] = 'juicebox-views-file-test';
+$translatables['juicebox_views_file_test'] = array(
+  t('Master'),
+  t('juicebox_views_file_test'),
+  t('more'),
+  t('Apply'),
+  t('Reset'),
+  t('Sort by'),
+  t('Asc'),
+  t('Desc'),
+  t('File ID'),
+  t('Base File'),
+);

@@ -1,0 +1,78 @@
+<?php
+
+/**
+ * @file
+ * Test case for integration with File Entity module.
+ */
+
+/**
+ * Class to define test case for integration with File Entity module.
+ */
+class JuiceboxFileEntityCase extends JuiceboxBaseCase {
+
+  /**
+   * Define test case info.
+   */
+  public static function getInfo() {
+    return array(
+      'name' => 'Juicebox File Entity integration tests',
+      'description' => 'Tests integration with File Enity module.',
+      'group' => 'Juicebox',
+      'dependencies' => array('file_entity'),
+    );
+  }
+
+  /**
+   * Define setup tasks.
+   */
+  public function setUp() {
+    parent::setUp('juicebox', 'file_entity');
+    // Create and login user.
+    $this->webUser = $this->drupalCreateUser(array('access content', 'access administration pages', 'administer site configuration', 'administer content types', 'administer nodes', 'create article content', 'edit any article content', 'delete any article content', 'administer image styles', 'administer files', 'edit any image files'));
+    $this->drupalLogin($this->webUser);
+  }
+
+  /**
+   * Test using File Entity fields for gallery titles and captions.
+   */
+  public function testFileEntityText() {
+    // Setup a content type with image data. Use the "file" type and widget.
+    $instance = $this->initFieldInstance('article', strtolower($this->randomName(10)), 'file', 'file_generic');
+    $this->activateJuiceboxFieldFormatter($instance);
+    // Create a new node with an image attached.
+    $test_image = current($this->drupalGetTestFiles('image'));
+    $node = $this->createNodeWithImage($instance, $test_image);
+    // Get raw file data expected in the node.
+    $item = reset(field_get_items('node', $node, $instance['field_name']));
+    $fid = (int) $item['fid'];
+    // Set the default file entity image alt field to allow formatting.
+    $edit = array(
+      'instance[settings][text_processing]' => TRUE,
+    );
+    $this->drupalPost('admin/structure/file-types/manage/image/fields/field_file_image_alt_text', $edit, t('Save settings'));
+    $this->assertText(t('Saved Alt Text configuration.'));
+    // Edit the uploaded file entity with title and caption text.
+    $edit = array(
+      'field_file_image_title_text[' . LANGUAGE_NONE . '][0][value]' => 'Some title text for alt field on file ' . $fid,
+      'field_file_image_alt_text[' . LANGUAGE_NONE . '][0][value]' => 'Some alt text for alt field on file ' . $fid . ' <strong>with formatting</strong>',
+    );
+    $this->drupalPost('file/' . $fid . '/edit', $edit, t('Save'));
+    $this->assertText(t('@type @title has been updated.', array('@type' => 'Image', '@title' => entity_label('file', (object) $item))), 'Custom file field alt and title text saved.');
+    // Alter field formatter specific settings so that we use the file entity
+    // title and alt fields for the image caption and title.
+    $this->drupalPostAJAX('admin/structure/types/manage/' . $instance['bundle'] . '/display', array(), $instance['field_name'] . '_formatter_settings_edit', NULL, array(), array(), 'field-ui-display-overview-form');
+    $edit = array(
+      'fields[' . $instance['field_name'] . '][settings_edit_form][settings][caption_source]' => 'field_file_image_alt_text',
+      'fields[' . $instance['field_name'] . '][settings_edit_form][settings][title_source]' => 'field_file_image_title_text',
+    );
+    $this->drupalPost(NULL, $edit, t('Save'));
+    $this->assertText(t('Your settings have been saved.'), 'Gallery configuration changes saved.');
+    // Check for correct XML. Note that the formatting should be maintained in
+    // the caption we enabled text formatting for the alt field provided by
+    // the image file entity.
+    $this->drupalGet('juicebox/xml/field/node/' . $node->nid . '/' . $instance['field_name'] . '/full');
+    $this->assertRaw('<title><![CDATA[Some title text for alt field on file ' . $fid . ']]></title>', 'Image entity title text found in XML');
+    $this->assertRaw('<caption><![CDATA[Some alt text for alt field on file ' . $fid . ' <strong>with formatting</strong>]]></caption>', 'Image entity caption text found in XML');
+  }
+
+}

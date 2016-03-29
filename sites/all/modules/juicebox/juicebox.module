@@ -1,0 +1,469 @@
+<?php
+
+
+/**
+ * @file
+ * Provides Drupal integration with the Juicebox library. This file contains
+ * the relevant Drupal hook implementations and callbacks.
+ */
+
+
+// Move the field-based logic (field hooks and related) into another file
+// purely for DX. This file still has to be globally included as field
+// hooks don't work as expected if formally defined in hook_hook_info().
+require_once dirname(__FILE__) . '/includes/juicebox.field.inc';
+
+
+/**
+ * Implements hook_menu().
+ */
+function juicebox_menu() {
+  // Add menu item that produces the "config.xml" data that is linked to a
+  // specific gallery.
+  $items['juicebox/xml/%'] = array(
+    'title' => 'Juicebox XML',
+    'description' => 'Deliver configuration XML for a Juicebox gallery.',
+    'page callback' => 'juicebox_page_xml',
+    'page arguments' => array(2),
+    // For efficiency we'll check access in parallel to other logic in the
+    // callback function, so we don't limit any access here.
+    'access callback' => TRUE,
+    'type' => MENU_CALLBACK,
+  );
+  // Add menu item for the global admin settings.
+  $items['admin/config/media/juicebox'] = array(
+    'title' => 'Juicebox',
+    'description' => 'Adjust global Juicebox settings.',
+    'file' => 'includes/juicebox.admin.inc',
+    'page callback' => 'drupal_get_form',
+    'page arguments' => array('juicebox_admin_settings'),
+    'access arguments' => array('administer site configuration'),
+  );
+  return $items;
+}
+
+
+/**
+ * Implements hook_theme().
+ */
+function juicebox_theme() {
+  return array(
+    // Theme hook to generate embed markup for a Juicebox gallery.
+    'juicebox_embed_markup' => array(
+      'variables' => array('gallery_id' => NULL, 'gallery_images' => array(), 'gallery_options' => array(), 'settings' => array(), 'c_links' => array()),
+      'path' => drupal_get_path('module', 'juicebox') . '/themes',
+      'file' => 'juicebox.theme.inc',
+    ),
+    // Theme hook to generate info/debug information for a Juicebox gallery.
+    'juicebox_debug_markup' => array(
+      'variables' => array('gallery_id' => NULL, 'gallery_images' => array(), 'gallery_options' => array(), 'settings' => array(), 'xml' => array(), 'c_links' => array()),
+      'path' => drupal_get_path('module', 'juicebox') . '/themes',
+      'file' => 'juicebox.theme.inc',
+    ),
+  );
+}
+
+
+/**
+ * Implements hook_libraries_info().
+ */
+function juicebox_libraries_info() {
+  $libraries['juicebox'] = array(
+    'name' => 'Juicebox',
+    'vendor url' => 'http://www.juicebox.net/',
+    'download url' => 'http://www.juicebox.net/download/',
+    'version arguments' => array(
+      'file' => 'juicebox.js',
+      'pattern' => '/Juicebox.([a-zA-Z]+[0-9\.\ -]+)/',
+      'lines' => 5,
+    ),
+    'files' => array(
+      // Note that we do not want the Juicebox library javascript to be
+      // aggregated by Drupal (set preprocess option = FALSE). This is because
+      // some supporting library CSS files must be at a specific location
+      // RELATIVE to to the main js file. Aggregation breaks this.
+      'js' => array('juicebox.js' => array('preprocess' => FALSE, 'group' => JS_LIBRARY, 'scope' => variable_get('juicebox_js_scope', 'header'))),
+    ),
+    'callbacks' => array(
+      'info' => array('juicebox_library_info'),
+      'post-detect' => array('juicebox_library_post_detect'),
+    ),
+  );
+  return $libraries;
+}
+
+
+/**
+ * Implements hook_views_api().
+ */
+function juicebox_views_api() {
+  return array(
+    'api' => 3.0,
+  );
+}
+
+
+/**
+ * Implements hook_views_plugin().
+ */
+function juicebox_views_plugins() {
+  $path = drupal_get_path('module', 'juicebox');
+  $plugins['style']['juicebox'] = array(
+    'title' => t('Juicebox Gallery'),
+    'help' => t('Display rows as a Juicebox Gallery.'),
+    'handler' => 'JuiceboxFormatterViewsStyle',
+    'path' => $path . '/plugins',
+    'uses row plugin' => FALSE,
+    'uses fields' => TRUE,
+    'uses options' => TRUE,
+    'uses grouping' => FALSE,
+    'type' => 'normal',
+  );
+  return $plugins;
+}
+
+
+/**
+ * Implements hook_image_default_styles().
+ */
+function juicebox_image_default_styles() {
+  $styles = array();
+  // Add suggested styles for multi-size support.
+  $styles['juicebox_small'] = array(
+    'label' => 'Juicebox small (800x800)',
+    'effects' => array(
+      array(
+        'name' => 'image_scale',
+        'data' => array('width' => 800, 'height' => 800, 'upscale' => FALSE),
+        'weight' => 0,
+      ),
+    ),
+  );
+  $styles['juicebox_medium'] = array(
+    'label' => 'Juicebox medium (1024x1024)',
+    'effects' => array(
+      array(
+        'name' => 'image_scale',
+        'data' => array('width' => 1024, 'height' => 1024, 'upscale' => FALSE),
+        'weight' => 0,
+      ),
+    ),
+  );
+  $styles['juicebox_large'] = array(
+    'label' => 'Juicebox large (2048x2048)',
+    'effects' => array(
+      array(
+        'name' => 'image_scale',
+        'data' => array('width' => 2048, 'height' => 2048, 'upscale' => FALSE),
+        'weight' => 0,
+      ),
+    ),
+  );
+  // Add a default thumbnail style that will fit (without stretching or scaling)
+  // within the stock Juicebox thumbnail space.
+  $styles['juicebox_square_thumbnail'] = array(
+    'label' => 'Juicebox square thumbnail (85x85)',
+    'effects' => array(
+      array(
+        'name' => 'image_scale_and_crop',
+        'data' => array('width' => 85, 'height' => 85),
+        'weight' => 0,
+      ),
+    ),
+  );
+  return $styles;
+}
+
+
+/**
+ * Implements hook_file_formatter_info_alter().
+ */
+function juicebox_file_formatter_info_alter(&$info) {
+  // Using a Juicebox field formatter on a complete file entity display does
+  // not make any sense, and is not supported. The line below removes that
+  // formatter option alltogether.
+  unset($info['file_field_juicebox_formatter']);
+}
+
+
+/**
+ * Factory to instantiate a Juicebox object along with its dependencies.
+ *
+ * The object returned will be uninitialized and will not represent a specific
+ * gallery until the init() method is called. This allows this function, and the
+ * object produced, to also be used in configuration management (building conf
+ * form structures, etc.).
+ *
+ * The specific classes and dependencies used can be modified via
+ * hook_juicebox_classes_alter().
+ *
+ * @return JuiceboxGalleryWrapperInterface
+ *   A new uninitialized Juicebox object.
+ */
+function juicebox() {
+  // Get the library data. We do this early (before instantiating) as the lib
+  // details should be allowed to impact which classes are used.
+  $library = juicebox_library_detect();
+  // Calculate the classes that need to be instantiated.
+  $classes = array('gallery' => 'JuiceboxGallery', 'juicebox' => 'JuiceboxGalleryDrupal');
+  // Allow the classes to be altered.
+  drupal_alter('juicebox_classes', $classes, $library);
+  if (class_exists($classes['gallery']) && class_exists($classes['juicebox'])) {
+    // Instantiate the Juicebox gallery objects with the appropriate
+    // object-specific options. Note that we don't set the ID here yet as that
+    // will be added via a setter method later.
+    $object_settings = array(
+      'filter_markup' => variable_get('juicebox_apply_markup_filter', TRUE),
+      'process_attributes' => TRUE,
+    );
+    $gallery = new $classes['gallery'](NULL, $object_settings);
+    if (in_array('JuiceboxGalleryInterface', class_implements($gallery))) {
+      $juicebox = new $classes['juicebox']($gallery, $library);
+      if (in_array('JuiceboxGalleryDrupalInterface', class_implements($juicebox))) {
+        return $juicebox;
+      }
+    }
+  }
+  // If we get here it means that something went wrong and the object could not
+  // be created.
+  throw new Exception(t('Cound not instantiate Juicebox gallery. Please try clearing the Drupal registry and all caches.'));
+}
+
+
+/**
+ * Get/detect the details of a Juicebox javascript library without loading it.
+ *
+ * This is essentially a wrapper for libraries_detect() with some caching added.
+ * It also allows library info to be fetched independently from the currently
+ * loaded version if needed (e.g., to accomodate XML requests that don't come
+ * from this site).
+ *
+ * @param boolean $force_local
+ *   Whether-or-not to force detection of the LOCALLY installed Juicebox library
+ *   details. If FALSE Libraries API detection may be bypased if library version
+ *   details can be detected through the URL.
+ * @param boolean $reset
+ *   Whether-or-not to bypass and reset any caching information.
+ * @return array
+ *   An associative array of the library information.
+ */
+function juicebox_library_detect($force_local = FALSE, $reset = FALSE) {
+  // We use our own static cache for this. Libraries API detection has a static
+  // cache, but as we may be bypassing full local detection in certain
+  // situations, we can't always use it.
+  $library = &drupal_static(__FUNCTION__, array());
+  if (!$library || $reset) {
+    // See if we have been passed version details in the URL. If so we bypass
+    // local detection and build our own libraries array.
+    $query = drupal_get_query_parameters();
+    if (!empty($query['jb-version']) && !$force_local) {
+      juicebox_library_info($library);
+      $version_number = check_plain($query['jb-version']);
+      if (!empty($query['jb-pro'])) {
+        $library['pro'] = TRUE;
+        $version = 'Pro';
+      }
+      else {
+        $version = 'Lite';
+      }
+      $library['version'] = $version . ' ' . $version_number;
+      juicebox_library_post_detect($library);
+    }
+    // Otherwise we just use the Libraries API to detect the local lib.
+    else {
+      // We maintain our own DB cache here because libraries_detect() does not
+      // have one. libaries_load() has one, but we don't want to be actually
+      // loading the library here.
+      $library = cache_get('juicebox_local_library', 'cache');
+      if ($library && !$reset) {
+        $library = $library->data;
+      }
+      else {
+        $library = libraries_detect('juicebox');
+        cache_set('juicebox_local_library', $library, 'cache');
+      }
+    }
+  }
+  return $library;
+}
+
+
+/**
+ * Menu callback: generate Juicebox XML.
+ *
+ * Note that this callback directly sets page headers and prints the XML result
+ * (if one can successfully be rendered).
+ *
+ * @see juicebox_menu()
+ */
+function juicebox_page_xml() {
+  $xml = '';
+  // If we have xml-source query parameters this indicates that the XML can
+  // probably not be generated here from scratch. Instead we must depend on a
+  // sub-request to another Drupal path (e.g., the gallery page) and search for
+  // embedded XML there. This is an experimental method for special cases.
+  $query = drupal_get_query_parameters();
+  if (isset($query['xml-source-path']) && isset($query['xml-source-id'])) {
+    // Render the path that contains our XML. Note that we use
+    // drupal_render_page() instead of render() to ensure the full page markup
+    // is returned including blocks (the XML might not be inside the main
+    // content area).
+    $source = drupal_render_page(menu_execute_active_handler($query['xml-source-path'], FALSE));
+    // Search for the XML within the raw sub-request markup. We could parse the
+    // DOM for this with DOMDocument, but a regex lookup is more lightweight.
+    $matches = array();
+    preg_match('/<script[^>]*id=\"' . $query['xml-source-id'] . '\"[^>]*>(.*)<\/script>/simU', $source, $matches);
+    if (!empty($matches[1]) && strpos($matches[1], '<?xml') === 0) {
+      $xml = $matches[1];
+    }
+  }
+  // If a sub-request XML lookup does not apply then we build the gallery and
+  // its XML from scratch. This is the more common and preferred method.
+  if (empty($xml)) {
+    $args = func_get_args();
+    // The XML loader that we use will depend on the formatter type. This type
+    // value should be visible in the URL. For formatters supported directly by
+    // this module we use the first arg to map to a XML loader class.
+    // @todo: consider using some form of formal plugin manager here.
+    $xml_loader_class = '';
+    $map = array('field' => 'JuiceboxXmlField', 'viewsstyle' => 'JuiceboxXmlViewsStyle');
+    if (!empty($map[$args[0]])) {
+      $xml_loader_class = $map[$args[0]];
+    }
+    // Allow other modules to alter, or provide a definition for, the class that
+    // should be used.
+    drupal_alter('juicebox_xml_class', $xml_loader_class, $args);
+    if (!class_exists($xml_loader_class) || !in_array('JuiceboxXmlInterface', class_implements($xml_loader_class))) {
+      return MENU_NOT_FOUND;
+    }
+    // Try to build the XML using the selected XML loader.
+    try {
+      $jb_xml = new $xml_loader_class($args);
+      if (!$jb_xml->access()) {
+        return MENU_ACCESS_DENIED;
+      }
+      // Get the XML.
+      $xml = $jb_xml->getXml();
+    }
+    catch (Exception $e) {
+      $message = 'Exception building Juicebox XML: !message in %function (line %line of %file).';
+      watchdog_exception('juicebox', $e, $message);
+      return MENU_NOT_FOUND;
+    }
+  }
+  // Set headers that apply only to XML requests.
+  drupal_add_http_header('Content-type', 'application/xml; charset=utf-8');
+  drupal_add_http_header('X-Robots-Tag', 'noindex');
+  if (variable_get('juicebox_enable_cors', FALSE)) {
+    drupal_add_http_header('Access-Control-Allow-Origin', '*');
+  }
+  // Bypass all themeing but still return (don't die) so that
+  // drupal_page_footer() is called.
+  print($xml);
+}
+
+
+/**
+ * Libraries API Info Callback
+ *
+ * Add baseline variables to a Juicebox library array that are not version
+ * specific but should always be defined. These values are generic to all
+ * Juicebox libraries and may be referenced even when the local library info
+ * cannot be loaded or is not used.
+ *
+ * @see juicebox_libraries_info()
+ */
+function juicebox_library_info(&$library) {
+  $library['disallowed_conf'] = array();
+  $library['compatible_mimetypes'] = array('image/gif', 'image/jpeg', 'image/png');
+  $library['base_languagelist'] = 'Show Thumbnails|Hide Thumbnails|Expand Gallery|Close Gallery|Open Image in New Window';
+}
+
+
+/**
+ * Libraries API Post-Detect Callback
+ *
+ * Add detailed variables to a Juicebox library array after the version info can
+ * be detected.
+ *
+ * @see juicebox_libraries_info()
+ */
+function juicebox_library_post_detect(&$library) {
+  $pro = FALSE;
+  $disallowed_conf = array();
+  if (!empty($library['version'])) {
+    // Check if this is a Pro version.
+    if (stripos($library['version'], "Pro") !== FALSE) {
+      $pro = TRUE;
+      $library['base_languagelist'] = 'Show Thumbnails|Hide Thumbnails|Expand Gallery|Close Gallery|Open Image in New Window|Next Image|Previous Image|Play Audio|Pause Audio|Show Information|Hide Information|Start AutoPlay|Stop AutoPlay|AutoPlay ON|AutoPlay OFF|Go Back|Buy this Image|Share on Facebook|Share on Twitter|Share on Google+|Share on Pinterest|Share on Tumblr|of';
+    }
+    // Get numeric part of the version statement.
+    $version_number = 0;
+    $matches = array();
+    preg_match("/[0-9\.]+[^\.]$/u", $library['version'], $matches);
+    if (!empty($matches[0])) {
+      $version_number = $matches[0];
+    }
+    // Some options are not available as LITE options < v1.3.
+    if (!$pro && version_compare($version_number, '1.3', '<')) {
+      $disallowed_conf = array_merge($disallowed_conf, array('jlib_textColor', 'jlib_thumbFrameColor', 'jlib_useFullscreenExpand', 'jlib_useThumbDots'));
+    }
+    // Multisize features are only available in PRO >= v1.4
+    if (!$pro || version_compare($version_number, '1.4', '<')) {
+      $disallowed_conf = array_merge($disallowed_conf, array('juicebox_multisize_image_style'));
+    }
+  }
+  $library['pro'] = $pro;
+  $library['disallowed_conf'] = $disallowed_conf;
+}
+
+
+/**
+ * Form validation callback: validate width/height inputs.
+ */
+function juicebox_element_validate_dimension($element, &$form_state, $form) {
+  if (!preg_match('/^[0-9]+?(%|px|em|in|cm|mm|ex|pt|pc)$/u', $element['#value'])) {
+    form_error($element, t('Please ensure that you width and height values are entered in a standard numeric format (such as <strong>100%</strong> or <strong>300px</strong>).'));
+  }
+}
+
+
+/**
+ * Form validation callback: validate Juicebox configuration options.
+ */
+function juicebox_element_validate_config($element, &$form_state, $form) {
+  // We are looking for input in the format of: optionName="optionValue".
+  // The check here is not too strict, it is just meant to catch general
+  // formatting issues.
+  $custom_options = explode("\n", $element['#value']);
+  foreach ($custom_options as $key => $option) {
+    $option = trim($option);
+    $line_number = $key + 1;
+    if (!empty($option) && !preg_match('/^[A-Za-z0-9]+?="[^"]+?"$/u', $option)) {
+      form_error($element, t('One of your manual configuration options appears to be formatted incorrectly. Please check line @line of this field and ensure that you are using the format <strong>optionName="optionValue"</strong> and that all spaces have been removed.', array('@line' => $line_number)));
+    }
+  }
+}
+
+
+/**
+ * Form pre-render callback: visually render fieldsets without affecting
+ * tree-based variable storage.
+ *
+ * This technique/code is taken almost directly from the Views module in
+ * views_ui_pre_render_add_fieldset_markup()
+ */
+function juicebox_form_pre_render_fieldsets($form) {
+  foreach (element_children($form) as $key) {
+    $element = $form[$key];
+    // In our form builder functions, we added an arbitrary #jb_fieldset
+    // property to any element that belongs in a fieldset. If this form element
+    // has that property, move it into its fieldset.
+    if (isset($element['#jb_fieldset']) && isset($form[$element['#jb_fieldset']])) {
+      $form[$element['#jb_fieldset']][$key] = $element;
+      // Remove the original element this duplicates.
+      unset($form[$key]);
+    }
+  }
+  return $form;
+}

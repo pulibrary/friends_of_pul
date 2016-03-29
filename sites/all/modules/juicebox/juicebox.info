@@ -1,0 +1,39 @@
+name = Juicebox
+description = Provides an integration between the Juicebox HTML5 responsive gallery library and Drupal.
+package = Media
+core = 7.x
+dependencies[] = image
+dependencies[] = libraries (>1.0)
+configure = admin/config/media/juicebox
+
+; Local Class and Plugin Files
+files[] = includes/JuiceboxGalleryInterface.inc
+files[] = includes/JuiceboxGallery.inc
+files[] = includes/JuiceboxGalleryDecorator.inc
+files[] = includes/JuiceboxGalleryDrupalInterface.inc
+files[] = includes/JuiceboxGalleryDrupal.inc
+files[] = plugins/JuiceboxXmlInterface.inc
+files[] = plugins/JuiceboxXmlField.inc
+files[] = plugins/JuiceboxXmlViewsStyle.inc
+files[] = plugins/JuiceboxFormatterViewsStyle.inc
+
+; Tests Files
+files[] = tests/JuiceboxBaseCase.test
+files[] = tests/JuiceboxFieldFormatterCase.test
+files[] = tests/JuiceboxFileCase.test
+files[] = tests/JuiceboxFileEntityCase.test
+files[] = tests/JuiceboxConfCase.test
+files[] = tests/JuiceboxConfGlobalCase.test
+files[] = tests/JuiceboxViewsCase.test
+files[] = tests/JuiceboxSubRequestCase.test
+
+; Test Dependencies
+test_dependencies[] = views
+test_dependencies[] = file_entity
+
+; Information added by Drupal.org packaging script on 2015-09-10
+version = "7.x-2.1"
+core = "7.x"
+project = "juicebox"
+datestamp = "1441853641"
+

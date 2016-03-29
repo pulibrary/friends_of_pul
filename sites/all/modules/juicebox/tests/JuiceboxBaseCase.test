@@ -1,0 +1,136 @@
+<?php
+
+/**
+ * @file
+ * Common helper methods for Juicebox module tests.
+ */
+
+/**
+ * Common helper class for Juicebox module tests.
+ */
+class JuiceboxBaseCase extends DrupalWebTestCase {
+
+  // Common variables.
+  protected $webUser;
+
+  /**
+   * Helper to turn the default instance of field_image on the article content
+   * type into a Juicebox display and create a test node that uses it.
+   */
+  protected function prepArticle() {
+    // Get instance data for the existing article field_image field.
+    $this->instance = field_info_instance('node', 'field_image', 'article');
+    // Ensure that the title and alt fields are enabled for the default article
+    // field_image field.
+    $edit = array(
+      'instance[settings][title_field]' => TRUE,
+      'instance[settings][alt_field]' => TRUE,
+    );
+    $this->drupalPost('admin/structure/types/manage/article/fields/field_image', $edit, t('Save settings'));
+    // Create a new node with an image attached.
+    $test_image = current($this->drupalGetTestFiles('image'));
+    $this->node = $this->createNodeWithImage($this->instance, $test_image);
+  }
+
+  /**
+   * Helper to setup a file/image field and instance on a specified content
+   * type.
+   *
+   * @param string $content_type_name
+   *   The existing content type machine name to add the field instance to.
+   * @param string $field_name
+   *   The machine name to use for the new field.
+   * @param string $field_type
+   *   The field type for the new field (such as "image" or "file").
+   * @param string $widget_type
+   *   The widget type to use for the new field instance .
+   */
+  protected function initFieldInstance($content_type_name, $field_name, $field_type, $widget_type) {
+    // Add a field of type image to the core article type.
+    $field_name_friendly = $this->randomName(20);
+    $edit = array(
+      'fields[_add_new_field][label]' => $field_name_friendly,
+      'fields[_add_new_field][field_name]' => $field_name,
+      'fields[_add_new_field][type]' => $field_type,
+      'fields[_add_new_field][widget_type]' => $widget_type,
+    );
+    $this->drupalPost('admin/structure/types/manage/' . $content_type_name . '/fields', $edit, t('Save'));
+    // We'll go with the default settings for the base.
+    $this->drupalPost(NULL, array(), t('Save field settings'));
+    // Toggle some options for the instance (depending on the field type) to
+    // ensure that caption fields are available.
+    $edit = array();
+    if ($field_type == 'image') {
+      $edit['instance[settings][alt_field]'] = TRUE;
+      $edit['instance[settings][title_field]'] = TRUE;
+    }
+    if ($field_type == 'file') {
+      $edit['instance[settings][description_field]'] = TRUE;
+      $edit['instance[settings][file_extensions]'] = 'txt,jpg,png,mp3,rtf,docx,pdf';
+    }
+    $this->drupalPost(NULL, $edit, t('Save settings'));
+    $this->assertText(t('Saved @name configuration.', array('@name' => $field_name_friendly)));
+    node_types_rebuild();
+    menu_rebuild();
+    return field_info_instance('node', 'field_' . $field_name, $content_type_name);
+  }
+
+  /**
+   * Helper to activate a Juicebox field formatter on a field.
+   *
+   * @param array $instance
+   *   The instance details, typically from field_info_instance(), that describe
+   *   the field to activate the formatter on.
+   */
+  protected function activateJuiceboxFieldFormatter($instance) {
+    $this->drupalGet('admin/structure/types/manage/' . $instance['bundle'] . '/display');
+    $edit = array(
+      'fields[' . $instance['field_name'] . '][type]' => 'juicebox_formatter',
+    );
+    $this->drupalPost(NULL, $edit, t('Save'));
+    $this->assertText(t('Your settings have been saved.'), 'Juicebox field formatter activated.');
+  }
+
+  /**
+   * Helper to upload an image to a node.
+   *
+   * @param array $instance
+   *   The instance details, typically from field_info_instance(), that describe
+   *   the field to upload an image to.
+   * @param $image
+   *   A file object representing the image to upload.
+   */
+  protected function createNodeWithImage($instance, $image) {
+    $edit = array(
+      'title' => 'Test Juicebox Gallery Node',
+      'files[' . $instance['field_name'] . '_' . LANGUAGE_NONE . '_0]' => drupal_realpath($image->uri),
+    );
+    $this->drupalPost('node/add/' . $instance['bundle'], $edit, t('Save'));
+    // Get ID of the newly created node from the current URL.
+    $matches = array();
+    preg_match('/node\/([0-9]+)/', $this->getUrl(), $matches);
+    if (isset($matches[1])) {
+      $nid = $matches[1];
+      // Now re-edit the node to add title and caption values for the newly
+      // uploaded image. This could probably also be done above with
+      // DrupalWebTestCase::drupalPostAJAX(), but this works too.
+      $edit = array(
+        'body[' . LANGUAGE_NONE . '][0][value]' => 'Some body content on node ' . $nid . ' <strong>with formatting</strong>',
+      );
+      if ($instance['widget']['type'] == 'image_image') {
+        $edit[$instance['field_name'] . '[' . LANGUAGE_NONE . '][0][title]'] = 'Some title text for field ' . $instance['field_name'] . ' on node ' . $nid;
+        $edit[$instance['field_name'] . '[' . LANGUAGE_NONE . '][0][alt]'] = 'Some alt text for field ' . $instance['field_name'] . ' on node ' . $nid . ' <strong>with formatting</strong>';
+      }
+      if ($instance['widget']['type'] == 'file_generic') {
+        $edit[$instance['field_name'] . '[' . LANGUAGE_NONE . '][0][description]'] = 'Some description text for field ' . $instance['field_name'] . ' on node ' . $nid . ' <strong>with formatting</strong>';
+      }
+      $this->drupalPost('node/' . $nid . '/edit', $edit, t('Save'));
+      $node = node_load($nid);
+      $item = reset(field_get_items('node', $node, $instance['field_name']));
+      $this->assertTrue($item, 'Node with image content created');
+      return $node;
+    }
+    return FALSE;
+  }
+
+}
