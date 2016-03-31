@@ -1,5 +1,10 @@
 .calendar-block h2 {
   margin-top: 0;
+
+  &.node__title {
+    margin-bottom: 0;
+    margin-top: 1em;
+  }
 }
 
 .calendar-block h2.node__title a {
@@ -57,4 +62,27 @@
 .legend {
   float: right;
   margin: 1em;
+}
+
+.page-taxonomy .feed-icon {
+  display: block;
+  margin-top: 1.5em;
+}
+
+.page-taxonomy .date-display-range {
+  clear: both;
+  display: inline;
+}
+
+.page-taxonomy .views-row-first h2.field-title {
+  margin-top: 0;
+}
+
+.page-taxonomy h2.field-title {
+  font-size: 1.5em;
+  margin: 1em 0 0.2em;
+}
+
+.page-taxonomy .media {
+  margin-bottom: 1.5em;
 }
