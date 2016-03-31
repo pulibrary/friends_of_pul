@@ -533,7 +533,7 @@ events',
     $pane->access = array();
     $pane->configuration = array(
       'admin_title' => 'Student Friends Banner',
-      'title' => '',
+      'title' => 'Student Friends',
       'body' => '<p><img src="/sites/all/themes/friends/assets/public/images/student-friends.jpg" alt="Student Friends of the Princeton University Library" /></p>',
       'format' => 'full_html',
       'substitute' => 1,

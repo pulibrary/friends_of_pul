@@ -14,4 +14,5 @@ features[ctools][] = views:views_default:3.0
 features[features_api][] = api:2
 features[page_manager_handlers][] = node_view__panel_context_bfe5b71e-99aa-442e-bd55-629b5f6e08aa
 features[views_view][] = calendar
+features[views_view][] = events_feed
 features_exclude[dependencies][ctools] = ctools
