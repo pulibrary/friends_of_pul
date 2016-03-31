@@ -193,6 +193,7 @@ function events_views_default_views() {
   $handler->display->display_options['arguments']['date_argument']['field'] = 'date_argument';
   $handler->display->display_options['arguments']['date_argument']['default_action'] = 'default';
   $handler->display->display_options['arguments']['date_argument']['default_argument_type'] = 'date';
+  $handler->display->display_options['arguments']['date_argument']['summary']['format'] = 'default_summary';
   $handler->display->display_options['arguments']['date_argument']['granularity_reset'] = 0;
   $handler->display->display_options['arguments']['date_argument']['add_delta'] = 'yes';
   $handler->display->display_options['arguments']['date_argument']['use_fromto'] = 'no';
@@ -606,6 +607,148 @@ function events_views_default_views() {
       'label' => 'Content: Has taxonomy term ID',
     ),
   );
+
+  /* Display: Upcoming Friends Events */
+  $handler = $view->new_display('panel_pane', 'Upcoming Friends Events', 'panel_pane_3');
+  $handler->display->display_options['defaults']['title'] = FALSE;
+  $handler->display->display_options['title'] = 'Upcoming Friends Events';
+  $handler->display->display_options['defaults']['style_plugin'] = FALSE;
+  $handler->display->display_options['style_plugin'] = 'list';
+  $handler->display->display_options['defaults']['style_options'] = FALSE;
+  $handler->display->display_options['defaults']['row_plugin'] = FALSE;
+  $handler->display->display_options['row_plugin'] = 'fields';
+  $handler->display->display_options['row_options']['default_field_elements'] = FALSE;
+  $handler->display->display_options['defaults']['row_options'] = FALSE;
+  $handler->display->display_options['defaults']['fields'] = FALSE;
+  /* Field: Content: Title */
+  $handler->display->display_options['fields']['title']['id'] = 'title';
+  $handler->display->display_options['fields']['title']['table'] = 'node';
+  $handler->display->display_options['fields']['title']['field'] = 'title';
+  $handler->display->display_options['fields']['title']['label'] = '';
+  $handler->display->display_options['fields']['title']['alter']['word_boundary'] = FALSE;
+  $handler->display->display_options['fields']['title']['alter']['ellipsis'] = FALSE;
+  $handler->display->display_options['fields']['title']['element_type'] = 'h2';
+  $handler->display->display_options['fields']['title']['element_class'] = 'node__title';
+  $handler->display->display_options['fields']['title']['element_label_colon'] = FALSE;
+  $handler->display->display_options['fields']['title']['element_default_classes'] = FALSE;
+  $handler->display->display_options['fields']['title']['hide_alter_empty'] = FALSE;
+  /* Field: Content: Start Datetime */
+  $handler->display->display_options['fields']['field_start_datetime']['id'] = 'field_start_datetime';
+  $handler->display->display_options['fields']['field_start_datetime']['table'] = 'field_data_field_start_datetime';
+  $handler->display->display_options['fields']['field_start_datetime']['field'] = 'field_start_datetime';
+  $handler->display->display_options['fields']['field_start_datetime']['label'] = '';
+  $handler->display->display_options['fields']['field_start_datetime']['element_label_colon'] = FALSE;
+  $handler->display->display_options['fields']['field_start_datetime']['hide_alter_empty'] = FALSE;
+  $handler->display->display_options['fields']['field_start_datetime']['settings'] = array(
+    'format_type' => 'long',
+    'fromto' => 'both',
+    'multiple_number' => '',
+    'multiple_from' => '',
+    'multiple_to' => '',
+    'show_remaining_days' => 0,
+  );
+  $handler->display->display_options['fields']['field_start_datetime']['group_rows'] = FALSE;
+  $handler->display->display_options['fields']['field_start_datetime']['delta_offset'] = '0';
+  $handler->display->display_options['defaults']['sorts'] = FALSE;
+  /* Sort criterion: Content: Start Datetime -  start date (field_start_datetime) */
+  $handler->display->display_options['sorts']['field_start_datetime_value']['id'] = 'field_start_datetime_value';
+  $handler->display->display_options['sorts']['field_start_datetime_value']['table'] = 'field_data_field_start_datetime';
+  $handler->display->display_options['sorts']['field_start_datetime_value']['field'] = 'field_start_datetime_value';
+  $handler->display->display_options['defaults']['filter_groups'] = FALSE;
+  $handler->display->display_options['defaults']['filters'] = FALSE;
+  /* Filter criterion: Content: Published */
+  $handler->display->display_options['filters']['status']['id'] = 'status';
+  $handler->display->display_options['filters']['status']['table'] = 'node';
+  $handler->display->display_options['filters']['status']['field'] = 'status';
+  $handler->display->display_options['filters']['status']['value'] = 1;
+  $handler->display->display_options['filters']['status']['group'] = 0;
+  $handler->display->display_options['filters']['status']['expose']['operator'] = FALSE;
+  /* Filter criterion: Content: Start Datetime -  start date (field_start_datetime) */
+  $handler->display->display_options['filters']['field_start_datetime_value']['id'] = 'field_start_datetime_value';
+  $handler->display->display_options['filters']['field_start_datetime_value']['table'] = 'field_data_field_start_datetime';
+  $handler->display->display_options['filters']['field_start_datetime_value']['field'] = 'field_start_datetime_value';
+  $handler->display->display_options['filters']['field_start_datetime_value']['operator'] = '>=';
+  $handler->display->display_options['filters']['field_start_datetime_value']['default_date'] = 'now';
+  /* Filter criterion: Content: Event Group (field_event_group) */
+  $handler->display->display_options['filters']['field_event_group_tid']['id'] = 'field_event_group_tid';
+  $handler->display->display_options['filters']['field_event_group_tid']['table'] = 'field_data_field_event_group';
+  $handler->display->display_options['filters']['field_event_group_tid']['field'] = 'field_event_group_tid';
+  $handler->display->display_options['filters']['field_event_group_tid']['value'] = array(
+    5 => '5',
+  );
+  $handler->display->display_options['filters']['field_event_group_tid']['type'] = 'select';
+  $handler->display->display_options['filters']['field_event_group_tid']['vocabulary'] = 'event_group';
+
+  /* Display: Upcoming Student Friends Events */
+  $handler = $view->new_display('panel_pane', 'Upcoming Student Friends Events', 'panel_pane_4');
+  $handler->display->display_options['defaults']['title'] = FALSE;
+  $handler->display->display_options['title'] = 'Upcoming Student Friends Events';
+  $handler->display->display_options['defaults']['style_plugin'] = FALSE;
+  $handler->display->display_options['style_plugin'] = 'list';
+  $handler->display->display_options['defaults']['style_options'] = FALSE;
+  $handler->display->display_options['defaults']['row_plugin'] = FALSE;
+  $handler->display->display_options['row_plugin'] = 'fields';
+  $handler->display->display_options['row_options']['default_field_elements'] = FALSE;
+  $handler->display->display_options['defaults']['row_options'] = FALSE;
+  $handler->display->display_options['defaults']['fields'] = FALSE;
+  /* Field: Content: Title */
+  $handler->display->display_options['fields']['title']['id'] = 'title';
+  $handler->display->display_options['fields']['title']['table'] = 'node';
+  $handler->display->display_options['fields']['title']['field'] = 'title';
+  $handler->display->display_options['fields']['title']['label'] = '';
+  $handler->display->display_options['fields']['title']['alter']['word_boundary'] = FALSE;
+  $handler->display->display_options['fields']['title']['alter']['ellipsis'] = FALSE;
+  $handler->display->display_options['fields']['title']['element_type'] = 'h2';
+  $handler->display->display_options['fields']['title']['element_class'] = 'node__title';
+  $handler->display->display_options['fields']['title']['element_label_colon'] = FALSE;
+  $handler->display->display_options['fields']['title']['element_default_classes'] = FALSE;
+  $handler->display->display_options['fields']['title']['hide_alter_empty'] = FALSE;
+  /* Field: Content: Start Datetime */
+  $handler->display->display_options['fields']['field_start_datetime']['id'] = 'field_start_datetime';
+  $handler->display->display_options['fields']['field_start_datetime']['table'] = 'field_data_field_start_datetime';
+  $handler->display->display_options['fields']['field_start_datetime']['field'] = 'field_start_datetime';
+  $handler->display->display_options['fields']['field_start_datetime']['label'] = '';
+  $handler->display->display_options['fields']['field_start_datetime']['element_label_colon'] = FALSE;
+  $handler->display->display_options['fields']['field_start_datetime']['hide_alter_empty'] = FALSE;
+  $handler->display->display_options['fields']['field_start_datetime']['settings'] = array(
+    'format_type' => 'long',
+    'fromto' => 'both',
+    'multiple_number' => '',
+    'multiple_from' => '',
+    'multiple_to' => '',
+    'show_remaining_days' => 0,
+  );
+  $handler->display->display_options['fields']['field_start_datetime']['group_rows'] = FALSE;
+  $handler->display->display_options['fields']['field_start_datetime']['delta_offset'] = '0';
+  $handler->display->display_options['defaults']['sorts'] = FALSE;
+  /* Sort criterion: Content: Start Datetime -  start date (field_start_datetime) */
+  $handler->display->display_options['sorts']['field_start_datetime_value']['id'] = 'field_start_datetime_value';
+  $handler->display->display_options['sorts']['field_start_datetime_value']['table'] = 'field_data_field_start_datetime';
+  $handler->display->display_options['sorts']['field_start_datetime_value']['field'] = 'field_start_datetime_value';
+  $handler->display->display_options['defaults']['filter_groups'] = FALSE;
+  $handler->display->display_options['defaults']['filters'] = FALSE;
+  /* Filter criterion: Content: Published */
+  $handler->display->display_options['filters']['status']['id'] = 'status';
+  $handler->display->display_options['filters']['status']['table'] = 'node';
+  $handler->display->display_options['filters']['status']['field'] = 'status';
+  $handler->display->display_options['filters']['status']['value'] = 1;
+  $handler->display->display_options['filters']['status']['group'] = 0;
+  $handler->display->display_options['filters']['status']['expose']['operator'] = FALSE;
+  /* Filter criterion: Content: Start Datetime -  start date (field_start_datetime) */
+  $handler->display->display_options['filters']['field_start_datetime_value']['id'] = 'field_start_datetime_value';
+  $handler->display->display_options['filters']['field_start_datetime_value']['table'] = 'field_data_field_start_datetime';
+  $handler->display->display_options['filters']['field_start_datetime_value']['field'] = 'field_start_datetime_value';
+  $handler->display->display_options['filters']['field_start_datetime_value']['operator'] = '>=';
+  $handler->display->display_options['filters']['field_start_datetime_value']['default_date'] = 'now';
+  /* Filter criterion: Content: Event Group (field_event_group) */
+  $handler->display->display_options['filters']['field_event_group_tid']['id'] = 'field_event_group_tid';
+  $handler->display->display_options['filters']['field_event_group_tid']['table'] = 'field_data_field_event_group';
+  $handler->display->display_options['filters']['field_event_group_tid']['field'] = 'field_event_group_tid';
+  $handler->display->display_options['filters']['field_event_group_tid']['value'] = array(
+    6 => '6',
+  );
+  $handler->display->display_options['filters']['field_event_group_tid']['type'] = 'select';
+  $handler->display->display_options['filters']['field_event_group_tid']['vocabulary'] = 'event_group';
   $export['calendar'] = $view;
 
   return $export;
