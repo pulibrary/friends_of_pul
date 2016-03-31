@@ -223,6 +223,25 @@ function panel_variants_default_page_manager_handlers() {
     $display->content['new-120eef27-73e7-41a2-bbc1-1de882dcf0c3'] = $pane;
     $display->panels['middle'][0] = 'new-120eef27-73e7-41a2-bbc1-1de882dcf0c3';
     $pane = new stdClass();
+    $pane->pid = 'new-95b13d56-8eaa-4638-a32c-c792335a658b';
+    $pane->panel = 'middle';
+    $pane->type = 'views_panes';
+    $pane->subtype = 'news-panel_pane_1';
+    $pane->shown = TRUE;
+    $pane->access = array();
+    $pane->configuration = array();
+    $pane->cache = array();
+    $pane->style = array(
+      'settings' => NULL,
+    );
+    $pane->css = array();
+    $pane->extras = array();
+    $pane->position = 1;
+    $pane->locks = array();
+    $pane->uuid = '95b13d56-8eaa-4638-a32c-c792335a658b';
+    $display->content['new-95b13d56-8eaa-4638-a32c-c792335a658b'] = $pane;
+    $display->panels['middle'][1] = 'new-95b13d56-8eaa-4638-a32c-c792335a658b';
+    $pane = new stdClass();
     $pane->pid = 'new-013f8085-8406-403d-acaa-caf50e38f183';
     $pane->panel = 'second';
     $pane->type = 'views_panes';
