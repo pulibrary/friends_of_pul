@@ -1,7 +1,75 @@
 .view-gallery {
-  .item-list li {
-    display: inline-block;
-    float: left;
-    width: 25%;
+  @include clearfix;
+
+  // .item-list li {
+  //   display: inline-block;
+  //   float: left;
+  //   width: 25%;
+  // }
+
+  .gallery-item {
+    @include breakpoint($bp-small-2) {
+      @include gallery(6);
+    }
+
+    @include breakpoint($tab) {
+      @include gallery(4);
+    }
+
+    @include breakpoint($bp-large) {
+      @include gallery(3);
+    }
+
+    margin-bottom: gutter(8);
+    padding-bottom: 0;
+    position: relative;
+
+    .gallery--image a,
+    .gallery--image a img {
+      color: $white;
+      display: block;
+      font-family: $font-sans;
+      height: 220px;
+      max-height: 220px;
+      text-shadow: 2px 2px 3px $black-opacity-7;
+      width: 220px;
+
+      &:hover {
+        text-decoration: none;
+      }
+    }
   }
+
+  .gallery--title {
+    background: $black-opacity-5;
+    font-size: 1.4em;
+    height: 220px;
+    line-height: 1.2em;
+    position: absolute;
+    top: 0;
+    width: 220px;
+
+    &:hover {
+      background: 0;
+
+      a {
+        color: $orange-light;
+        text-decoration: none;
+        text-shadow: 2px 2px 3px $black;
+      }
+    }
+
+    a {
+      color: $white;
+      display: block;
+      font-size: 1.4em;
+      line-height: 1.2em;
+      padding: 20px;
+      text-shadow: 2px 2px 3px $black-opacity-7;
+    }
+  }
+}
+
+.view-content {
+  @include clearfix;
 }

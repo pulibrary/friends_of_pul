@@ -47,7 +47,9 @@
       // get tagged with a 'foo-processed' class, causing all future invocations
       // of this behavior to ignore them.
       $('.gallery--title', context).once('friends', function () {
-        $('.gallery--title + .gallery--image:empty').prev().hide();
+        $('.gallery--title + .gallery--image:empty').parent().remove();
+        // $('.gallery--image:empty').remove();
+        // $('.gallery-item:empty').remove();
       });
     }
   };
