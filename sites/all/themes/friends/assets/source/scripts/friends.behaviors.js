@@ -38,7 +38,7 @@
    *   Drupal.settings directly you should use this because of potential
    *   modifications made by the Ajax callback that also produced 'context'.
    */
-  Drupal.behaviors.friendsExampleBehavior = {
+  Drupal.behaviors.friendsHideGalleryImage = {
     attach: function (context, settings) {
       // By using the 'context' variable we make sure that our code only runs on
       // the relevant HTML. Furthermore, by using jQuery.once() we make sure that
@@ -46,13 +46,10 @@
       // processed previously. By using .once('foo') all processed elements will
       // get tagged with a 'foo-processed' class, causing all future invocations
       // of this behavior to ignore them.
-      $('.some-selector', context).once('foo', function () {
-        // Now, we are invoking the previously declared theme function using two
-        // settings as arguments.
-        var $anchor = Drupal.theme('friendsExampleButton', settings.myExampleLinkPath, settings.myExampleLinkTitle);
-
-        // The anchor is then appended to the current element.
-        $anchor.appendTo(this);
+      $('.gallery--title', context).once('friends', function () {
+        $('.gallery--title + .gallery--image:empty').parent().remove();
+        // $('.gallery--image:empty').remove();
+        // $('.gallery-item:empty').remove();
       });
     }
   };

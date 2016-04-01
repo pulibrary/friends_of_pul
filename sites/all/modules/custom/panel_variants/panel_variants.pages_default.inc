@@ -395,7 +395,7 @@ events',
     ),
   );
   $display = new panels_display();
-  $display->layout = 'pul-base-nine-three';
+  $display->layout = 'single';
   $display->layout_settings = array();
   $display->panel_settings = array(
     'style_settings' => array(
@@ -411,7 +411,7 @@ events',
   $display->panels = array();
     $pane = new stdClass();
     $pane->pid = 'new-91369b8f-2f10-463e-8263-a465e221ed52';
-    $pane->panel = 'first';
+    $pane->panel = 'middle';
     $pane->type = 'entity_view';
     $pane->subtype = 'node';
     $pane->shown = TRUE;
@@ -433,7 +433,7 @@ events',
     $pane->locks = array();
     $pane->uuid = '91369b8f-2f10-463e-8263-a465e221ed52';
     $display->content['new-91369b8f-2f10-463e-8263-a465e221ed52'] = $pane;
-    $display->panels['first'][0] = 'new-91369b8f-2f10-463e-8263-a465e221ed52';
+    $display->panels['middle'][0] = 'new-91369b8f-2f10-463e-8263-a465e221ed52';
   $display->hide_title = PANELS_TITLE_FIXED;
   $display->title_pane = '0';
   $handler->conf['display'] = $display;
