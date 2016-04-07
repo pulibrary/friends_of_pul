@@ -1,6 +1,7 @@
 .front .wrapper--highlighted {
-  background: linear-gradient($highlighted-wrapper-5, $highlighted-wrapper-5), url("#{$base-path}/images/friends-highlight.jpg") center no-repeat;
-  min-height: 300px;
+  // background: linear-gradient($highlighted-wrapper-5, $highlighted-wrapper-5), url("#{$base-path}/images/friends-highlight.jpg") center no-repeat;
+  background: none;
+  min-height: 0;
 
   h2 {
     color: $white;
@@ -9,8 +10,17 @@
     text-shadow: 0 1px 1px $black, 0 4px 3px $black-opacity-5, 0 8px 13px $black-opacity-2, 0 18px 23px $black-opacity-2;
   }
 
-  .block__content {
+  .l-region.l-region--highlighted {
+    padding: 0;
+  }
+
+  .block__title {
     display: none;
+  }
+
+  .block__content {
+    display: block;
+    text-align: center;
   }
 }
 
@@ -18,8 +28,4 @@
   @include breakpoint($desk) {
     display: none;
   }
-}
-
-.block--pudl-highlight {
-  display: none;
 }
