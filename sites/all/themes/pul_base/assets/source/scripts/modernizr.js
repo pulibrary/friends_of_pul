@@ -1,6 +1,6 @@
 /*!
- * modernizr v3.3.1
- * Build http://modernizr.com/download?-svg-addtest-fnbind-printshiv-setclasses-testprop-dontmin
+ * modernizr v3.5.0
+ * Build https://modernizr.com/download?-supports-svg-addtest-fnbind-printshiv-setclasses-testprop-dontmin
  *
  * Copyright (c)
  *  Faruk Ates
@@ -36,7 +36,7 @@
 
   var ModernizrProto = {
     // The current version, dummy
-    _version: '3.3.1',
+    _version: '3.5.0',
 
     // Any settings that don't work as separate modules
     // can go in here as configuration.
@@ -159,7 +159,6 @@
             Modernizr[featureNameSplit[0]] = result;
           } else {
             // cast to a Boolean, if not one already
-            /* jshint -W053 */
             if (Modernizr[featureNameSplit[0]] && !(Modernizr[featureNameSplit[0]] instanceof Boolean)) {
               Modernizr[featureNameSplit[0]] = new Boolean(Modernizr[featureNameSplit[0]]);
             }
@@ -222,7 +221,11 @@
     if (Modernizr._config.enableClasses) {
       // Add the new classes
       className += ' ' + classPrefix + classes.join(' ' + classPrefix);
-      isSVG ? docElement.className.baseVal = className : docElement.className = className;
+      if (isSVG) {
+        docElement.className.baseVal = className;
+      } else {
+        docElement.className = className;
+      }
     }
 
   }
@@ -445,7 +448,6 @@
         Modernizr[featureNameSplit[0]] = test;
       } else {
         // cast to a Boolean, if not one already
-        /* jshint -W053 */
         if (Modernizr[featureNameSplit[0]] && !(Modernizr[featureNameSplit[0]] instanceof Boolean)) {
           Modernizr[featureNameSplit[0]] = new Boolean(Modernizr[featureNameSplit[0]]);
         }
@@ -454,9 +456,7 @@
       }
 
       // Set a single class (either `feature` or `no-feature`)
-      /* jshint -W041 */
       setClasses([(!!test && test != false ? '' : 'no-') + featureNameSplit.join('-')]);
-      /* jshint +W041 */
 
       // Trigger the event
       Modernizr._trigger(feature, test);
@@ -486,7 +486,6 @@
      * @preserve HTML5 Shiv 3.7.3 | @afarkas @jdalton @jon_neal @rem | MIT/GPL2 Licensed
      */
     ;(function(window, document) {
-      /*jshint evil:true */
       /** version */
       var version = '3.7.3';
 
@@ -690,10 +689,10 @@
                                                         'h.shivMethods&&(' +
                                                         // unroll the `createElement` calls
                                                         getElements().join().replace(/[\w\-:]+/g, function(nodeName) {
-          data.createElem(nodeName);
-          data.frag.createElement(nodeName);
-          return 'c("' + nodeName + '")';
-        }) +
+                                                          data.createElem(nodeName);
+                                                          data.frag.createElement(nodeName);
+                                                          return 'c("' + nodeName + '")';
+                                                        }) +
           ');return n}'
                                                        )(html5, data.frag);
       }
@@ -835,7 +834,7 @@
        */
       function addWrappers(ownerDocument) {
         var node,
-        nodes = ownerDocument.getElementsByTagName('*'),
+          nodes = ownerDocument.getElementsByTagName('*'),
           index = nodes.length,
           reElements = RegExp('^(?:' + getElements().join('|') + ')$', 'i'),
           result = [];
@@ -857,7 +856,7 @@
        */
       function createWrapper(element) {
         var node,
-        nodes = element.attributes,
+          nodes = element.attributes,
           index = nodes.length,
           wrapper = element.ownerDocument.createElement(shivNamespace + ':' + element.nodeName);
 
@@ -880,7 +879,7 @@
        */
       function shivCssText(cssText) {
         var pair,
-        parts = cssText.split('{'),
+          parts = cssText.split('{'),
           index = parts.length,
           reElements = RegExp('(^|[\\s,>+~])(' + getElements().join('|') + ')(?=[[\\s,>+~#.:]|$)', 'gi'),
           replacement = '$1' + shivNamespace + '\\:$2';
@@ -915,8 +914,8 @@
        */
       function shivPrint(ownerDocument) {
         var shivedSheet,
-        wrappers,
-        data = getExpandoData(ownerDocument),
+          wrappers,
+          data = getExpandoData(ownerDocument),
           namespaces = ownerDocument.namespaces,
           ownerWindow = ownerDocument.parentWindow;
 
@@ -940,9 +939,9 @@
           removeSheet();
 
           var imports,
-          length,
-          sheet,
-          collection = ownerDocument.styleSheets,
+            length,
+            sheet,
+            collection = ownerDocument.styleSheets,
             cssText = [],
             index = collection.length,
             sheets = Array(index);
@@ -1005,7 +1004,7 @@
         module.exports = html5;
       }
 
-    }(typeof window !== "undefined" ? window : this, document));
+    }(typeof window !== 'undefined' ? window : this, document));
   }
 
   ;
@@ -1169,6 +1168,7 @@
       body.parentNode.removeChild(body);
       docElement.style.overflow = docOverflow;
       // Trigger layout so kinetic scrolling isn't disabled in iOS6+
+      // eslint-disable-next-line
       docElement.offsetHeight;
     } else {
       div.parentNode.removeChild(div);
@@ -1195,6 +1195,44 @@
       return '-' + m1.toLowerCase();
     }).replace(/^ms-/, '-ms-');
   }
+  ;
+
+
+  /**
+   * wrapper around getComputedStyle, to fix issues with Firefox returning null when
+   * called inside of a hidden iframe
+   *
+   * @access private
+   * @function computedStyle
+   * @param {HTMLElement|SVGElement} - The element we want to find the computed styles of
+   * @param {string|null} [pseudoSelector]- An optional pseudo element selector (e.g. :before), of null if none
+   * @returns {CSSStyleDeclaration}
+   */
+
+  function computedStyle(elem, pseudo, prop) {
+    var result;
+
+    if ('getComputedStyle' in window) {
+      result = getComputedStyle.call(window, elem, pseudo);
+      var console = window.console;
+
+      if (result !== null) {
+        if (prop) {
+          result = result.getPropertyValue(prop);
+        }
+      } else {
+        if (console) {
+          var method = console.error ? 'error' : 'log';
+          console[method].call(console, 'getComputedStyle returning null, its possible modernizr test results are inaccurate');
+        }
+      }
+    } else {
+      result = !pseudo && elem.currentStyle && elem.currentStyle[prop];
+    }
+
+    return result;
+  }
+
   ;
 
   /**
@@ -1231,7 +1269,7 @@
       }
       conditionText = conditionText.join(' or ');
       return injectElementWithStyles('@supports (' + conditionText + ') { #modernizr { position: absolute; } }', function(node) {
-        return getComputedStyle(node, null).position == 'absolute';
+        return computedStyle(node, null, 'position') == 'absolute';
       });
     }
     return undefined;
@@ -1288,8 +1326,9 @@
     // inside of an SVG element, in certain browsers, the `style` element is only
     // defined for valid tags. Therefore, if `modernizr` does not have one, we
     // fall back to a less used element and hope for the best.
-    var elems = ['modernizr', 'tspan'];
-    while (!mStyle.style) {
+    // for strict XHTML browsers the hardly used samp element is used
+    var elems = ['modernizr', 'tspan', 'samp'];
+    while (!mStyle.style && elems.length) {
       afterInit = true;
       mStyle.modElem = createElement(elems.shift());
       mStyle.style = mStyle.modElem.style;
@@ -1428,6 +1467,30 @@ Detects support for SVG in `<embed>` or `<object>` elements.
 */
 
   Modernizr.addTest('svg', !!document.createElementNS && !!document.createElementNS('http://www.w3.org/2000/svg', 'svg').createSVGRect);
+
+/*!
+{
+  "name": "CSS Supports",
+  "property": "supports",
+  "caniuse": "css-featurequeries",
+  "tags": ["css"],
+  "builderAliases": ["css_supports"],
+  "notes": [{
+    "name": "W3 Spec",
+    "href": "http://dev.w3.org/csswg/css3-conditional/#at-supports"
+  },{
+    "name": "Related Github Issue",
+    "href": "https://github.com/Modernizr/Modernizr/issues/648"
+  },{
+    "name": "W3 Info",
+    "href": "http://dev.w3.org/csswg/css3-conditional/#the-csssupportsrule-interface"
+  }]
+}
+!*/
+
+  var newSyntax = 'CSS' in window && 'supports' in window.CSS;
+  var oldSyntax = 'supportsCSS' in window;
+  Modernizr.addTest('supports', newSyntax || oldSyntax);
 
 
   // Run each test

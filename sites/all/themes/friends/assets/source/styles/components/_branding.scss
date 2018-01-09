@@ -89,7 +89,7 @@ $logo-height: 35px; // large = 50px; small = 35px;
   line-height: 21px;
   margin-left: -0.7em;
 
-  &:before {
+  &::before {
     content: "";
     display: inline-block;
     height: 100%;
