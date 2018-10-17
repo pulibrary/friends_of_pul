@@ -1,17 +1,12 @@
 <?php
 
 /**
- * @file
  * Views' relationship handlers.
- */
-
-/**
- *
  */
 class webform_handler_relationship_submission_data extends views_handler_relationship {
 
   /**
-   *
+   * {@inheritdoc}
    */
   public function option_definition() {
     $options = parent::option_definition();
@@ -21,7 +16,7 @@ class webform_handler_relationship_submission_data extends views_handler_relatio
   }
 
   /**
-   *
+   * {@inheritdoc}
    */
   public function options_form(&$form, &$form_state) {
     parent::options_form($form, $form_state);
@@ -35,7 +30,7 @@ class webform_handler_relationship_submission_data extends views_handler_relatio
   }
 
   /**
-   *
+   * {@inheritdoc}
    */
   public function options_validate(&$form, &$form_state) {
     parent::options_validate($form, $form_state);
@@ -43,7 +38,7 @@ class webform_handler_relationship_submission_data extends views_handler_relatio
   }
 
   /**
-   *
+   * {@inheritdoc}
    */
   public function options_submit(&$form, &$form_state) {
     parent::options_submit($form, $form_state);

@@ -191,13 +191,14 @@ function _webform_edit_file($component) {
     '#parents' => array('extra', 'progress_indicator'),
   );
 
-  // TODO: Make managed_file respect the "size" parameter.
+  // @todo: Make managed_file respect the "size" parameter.
   /*
   $form['display']['width'] = array(
   '#type' => 'textfield',
   '#title' => t('Width'),
   '#default_value' => $component['extra']['width'],
-  '#description' => t('Width of the file field.') . ' ' . t('Leaving blank will use the default size.'),
+  '#description' => t('Width of the file field.') . ' ' .
+    t('Leaving blank will use the default size.'),
   '#size' => 5,
   '#maxlength' => 10,
   '#weight' => 4,
@@ -209,6 +210,8 @@ function _webform_edit_file($component) {
 }
 
 /**
+ * Form API validator ensures rename string is empty or contains one token.
+ *
  * A Form API element validate function to ensure that the rename string is
  * either empty or contains at least one token.
  */
@@ -394,6 +397,7 @@ function _webform_render_file($component, $value = NULL, $filter = TRUE, $submis
  *   - element: A render element representing the file.
  *
  * @return string
+ *   The HTML.
  */
 function theme_webform_managed_file($variables) {
   $element = $variables['element'];
@@ -426,8 +430,9 @@ function _webform_submit_file($component, $value) {
   $fid = is_array($value)
             ? (!empty($value['fid']) ? $value['fid'] : '')
             : (!empty($value) ? $value : '');
-  // Extend access to this file, even if the submission has not been saved yet. This may happen when
-  // previewing a private file which was selected but not explicitly uploaded, and then previewed.
+  // Extend access to this file, even if the submission has not been saved yet.
+  // This may happen when previewing a private file which was selected but not
+  // explicitly uploaded, and then previewed.
   if ($fid) {
     $_SESSION['webform_files'][$fid] = $fid;
   }
@@ -497,8 +502,6 @@ function _webform_delete_file($component, $value) {
  */
 function _webform_attachments_file($component, $value) {
   $file = (array) webform_get_file($value[0]);
-  // This is necessary until the next release of mimemail is out, see [#1388786].
-  $file['filepath'] = $file['uri'];
   $files = array($file);
   return $files;
 }
@@ -627,8 +630,9 @@ function webform_file_usage_adjust($submission) {
 }
 
 /**
- * Rename any files which are eligible for renaming, if this submission is being
- * submitted for the first time.
+ * Rename any files which are eligible for renaming.
+ *
+ * Renames if this submission is being submitted for the first time.
  */
 function webform_file_rename($node, $submission) {
   if (isset($submission->file_usage)) {
