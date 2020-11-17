@@ -1,4 +1,5 @@
 <?php
+
 /**
  * @file
  * photo_gallery.features.inc
