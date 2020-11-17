@@ -1,0 +1,17 @@
+name: friends
+recipe: drupal7
+config:
+  php: '7.2'
+  webroot: .
+services:
+  node:
+    type: 'node:6.15'
+    globals:
+      gulp-cli: latest
+tooling:
+  npm:
+    service: node
+  node:
+    service: node
+  gulp:
+    service: node
