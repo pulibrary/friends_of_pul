@@ -1,4 +1,5 @@
 <?php
+
 /**
  * @file
  * panel_variants.features.inc

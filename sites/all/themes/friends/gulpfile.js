@@ -58,7 +58,6 @@ gulp.task('styles', function(){
     .pipe(p.sourcemaps.init())
     .pipe(p.sass({
       includePaths: [
-        require('node-normalize-scss').includePaths,
         require('bourbon').includePaths,
         './node_modules/susy/sass',
         './node_modules/breakpoint-sass/stylesheets'
@@ -271,6 +270,6 @@ gulp.task('default', function(callback){
     ['lint:scss'],
     ['styles', 'scripts'],
     ['fonts', 'images'],
-    ['browser-sync4drupal', 'watch4drupal'],
+    // ['browser-sync4drupal', 'watch4drupal'],
     callback);
 });

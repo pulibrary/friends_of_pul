@@ -1,4 +1,5 @@
 <?php
+
 /**
  * @file
  * photo_gallery.views_default.inc
@@ -110,7 +111,7 @@ function photo_gallery_views_default_views() {
   $handler->display->display_options['arguments']['title']['summary_options']['items_per_page'] = '25';
   $handler->display->display_options['arguments']['title']['limit'] = '0';
   $handler->display->display_options['arguments']['title']['transform_dash'] = TRUE;
-  /* Filter criterion: Content: Published */
+  /* Filter criterion: Content: Published status */
   $handler->display->display_options['filters']['status']['id'] = 'status';
   $handler->display->display_options['filters']['status']['table'] = 'node';
   $handler->display->display_options['filters']['status']['field'] = 'status';
@@ -145,6 +146,8 @@ function photo_gallery_views_default_views() {
   $handler->display->display_options['fields']['title']['alter']['make_link'] = TRUE;
   $handler->display->display_options['fields']['title']['alter']['path'] = 'gallery/[title]';
   $handler->display->display_options['fields']['title']['alter']['replace_spaces'] = TRUE;
+  $handler->display->display_options['fields']['title']['alter']['max_length'] = '65';
+  $handler->display->display_options['fields']['title']['alter']['trim'] = TRUE;
   $handler->display->display_options['fields']['title']['element_type'] = 'div';
   $handler->display->display_options['fields']['title']['element_class'] = 'gallery--title';
   $handler->display->display_options['fields']['title']['element_label_colon'] = FALSE;
@@ -186,7 +189,7 @@ function photo_gallery_views_default_views() {
   $handler->display->display_options['arguments']['title']['transform_dash'] = TRUE;
   $handler->display->display_options['defaults']['filter_groups'] = FALSE;
   $handler->display->display_options['defaults']['filters'] = FALSE;
-  /* Filter criterion: Content: Published */
+  /* Filter criterion: Content: Published status */
   $handler->display->display_options['filters']['status']['id'] = 'status';
   $handler->display->display_options['filters']['status']['table'] = 'node';
   $handler->display->display_options['filters']['status']['field'] = 'status';
@@ -201,7 +204,7 @@ function photo_gallery_views_default_views() {
     'event' => 'event',
   );
   $handler->display->display_options['filters']['type']['group'] = 1;
-  $handler->display->display_options['path'] = 'photos';
+  $handler->display->display_options['path'] = 'events/photos';
   $handler->display->display_options['menu']['type'] = 'normal';
   $handler->display->display_options['menu']['title'] = 'Photo Gallery';
   $handler->display->display_options['menu']['weight'] = '0';

@@ -1,4 +1,5 @@
 <?php
+
 /**
  * @file
  * events.views_default.inc
@@ -64,7 +65,7 @@ function events_views_default_views() {
   );
   $handler->display->display_options['fields']['field_start_datetime']['group_rows'] = FALSE;
   $handler->display->display_options['fields']['field_start_datetime']['delta_offset'] = '0';
-  /* Filter criterion: Content: Published */
+  /* Filter criterion: Content: Published status */
   $handler->display->display_options['filters']['status']['id'] = 'status';
   $handler->display->display_options['filters']['status']['table'] = 'node';
   $handler->display->display_options['filters']['status']['field'] = 'status';
@@ -444,7 +445,7 @@ function events_views_default_views() {
   $handler->display->display_options['sorts']['field_start_datetime_value']['field'] = 'field_start_datetime_value';
   $handler->display->display_options['defaults']['filter_groups'] = FALSE;
   $handler->display->display_options['defaults']['filters'] = FALSE;
-  /* Filter criterion: Content: Published */
+  /* Filter criterion: Content: Published status */
   $handler->display->display_options['filters']['status']['id'] = 'status';
   $handler->display->display_options['filters']['status']['table'] = 'node';
   $handler->display->display_options['filters']['status']['field'] = 'status';
@@ -457,15 +458,15 @@ function events_views_default_views() {
   $handler->display->display_options['filters']['field_start_datetime_value']['field'] = 'field_start_datetime_value';
   $handler->display->display_options['filters']['field_start_datetime_value']['operator'] = '>=';
   $handler->display->display_options['filters']['field_start_datetime_value']['default_date'] = 'now';
-  /* Filter criterion: Content: Event Group (field_event_group) */
-  $handler->display->display_options['filters']['field_event_group_tid']['id'] = 'field_event_group_tid';
-  $handler->display->display_options['filters']['field_event_group_tid']['table'] = 'field_data_field_event_group';
-  $handler->display->display_options['filters']['field_event_group_tid']['field'] = 'field_event_group_tid';
-  $handler->display->display_options['filters']['field_event_group_tid']['value'] = array(
+  /* Filter criterion: Content: Group (field_group) */
+  $handler->display->display_options['filters']['field_group_tid']['id'] = 'field_group_tid';
+  $handler->display->display_options['filters']['field_group_tid']['table'] = 'field_data_field_group';
+  $handler->display->display_options['filters']['field_group_tid']['field'] = 'field_group_tid';
+  $handler->display->display_options['filters']['field_group_tid']['value'] = array(
     5 => '5',
   );
-  $handler->display->display_options['filters']['field_event_group_tid']['type'] = 'select';
-  $handler->display->display_options['filters']['field_event_group_tid']['vocabulary'] = 'event_group';
+  $handler->display->display_options['filters']['field_group_tid']['type'] = 'select';
+  $handler->display->display_options['filters']['field_group_tid']['vocabulary'] = 'group';
 
   /* Display: Upcoming Student Friends Events */
   $handler = $view->new_display('panel_pane', 'Upcoming Student Friends Events', 'panel_pane_4');
@@ -515,7 +516,7 @@ function events_views_default_views() {
   $handler->display->display_options['sorts']['field_start_datetime_value']['field'] = 'field_start_datetime_value';
   $handler->display->display_options['defaults']['filter_groups'] = FALSE;
   $handler->display->display_options['defaults']['filters'] = FALSE;
-  /* Filter criterion: Content: Published */
+  /* Filter criterion: Content: Published status */
   $handler->display->display_options['filters']['status']['id'] = 'status';
   $handler->display->display_options['filters']['status']['table'] = 'node';
   $handler->display->display_options['filters']['status']['field'] = 'status';
@@ -528,15 +529,15 @@ function events_views_default_views() {
   $handler->display->display_options['filters']['field_start_datetime_value']['field'] = 'field_start_datetime_value';
   $handler->display->display_options['filters']['field_start_datetime_value']['operator'] = '>=';
   $handler->display->display_options['filters']['field_start_datetime_value']['default_date'] = 'now';
-  /* Filter criterion: Content: Event Group (field_event_group) */
-  $handler->display->display_options['filters']['field_event_group_tid']['id'] = 'field_event_group_tid';
-  $handler->display->display_options['filters']['field_event_group_tid']['table'] = 'field_data_field_event_group';
-  $handler->display->display_options['filters']['field_event_group_tid']['field'] = 'field_event_group_tid';
-  $handler->display->display_options['filters']['field_event_group_tid']['value'] = array(
+  /* Filter criterion: Content: Group (field_group) */
+  $handler->display->display_options['filters']['field_group_tid']['id'] = 'field_group_tid';
+  $handler->display->display_options['filters']['field_group_tid']['table'] = 'field_data_field_group';
+  $handler->display->display_options['filters']['field_group_tid']['field'] = 'field_group_tid';
+  $handler->display->display_options['filters']['field_group_tid']['value'] = array(
     6 => '6',
   );
-  $handler->display->display_options['filters']['field_event_group_tid']['type'] = 'select';
-  $handler->display->display_options['filters']['field_event_group_tid']['vocabulary'] = 'event_group';
+  $handler->display->display_options['filters']['field_group_tid']['type'] = 'select';
+  $handler->display->display_options['filters']['field_group_tid']['vocabulary'] = 'group';
   $export['calendar'] = $view;
 
   $view = new view();
@@ -598,7 +599,7 @@ function events_views_default_views() {
   $handler->display->display_options['fields']['field_location']['settings'] = array(
     'link' => 0,
   );
-  /* Sort criterion: Content: Sticky */
+  /* Sort criterion: Content: Sticky status */
   $handler->display->display_options['sorts']['sticky']['id'] = 'sticky';
   $handler->display->display_options['sorts']['sticky']['table'] = 'node';
   $handler->display->display_options['sorts']['sticky']['field'] = 'sticky';
@@ -607,6 +608,7 @@ function events_views_default_views() {
   $handler->display->display_options['sorts']['created']['id'] = 'created';
   $handler->display->display_options['sorts']['created']['table'] = 'node';
   $handler->display->display_options['sorts']['created']['field'] = 'created';
+  $handler->display->display_options['sorts']['created']['order'] = 'DESC';
   /* Contextual filter: Content: Has taxonomy term ID (with depth) */
   $handler->display->display_options['arguments']['term_node_tid_depth']['id'] = 'term_node_tid_depth';
   $handler->display->display_options['arguments']['term_node_tid_depth']['table'] = 'node';
@@ -629,7 +631,7 @@ function events_views_default_views() {
   $handler->display->display_options['arguments']['term_node_tid_depth_modifier']['default_argument_type'] = 'fixed';
   $handler->display->display_options['arguments']['term_node_tid_depth_modifier']['summary']['format'] = 'default_summary';
   $handler->display->display_options['arguments']['term_node_tid_depth_modifier']['specify_validation'] = TRUE;
-  /* Filter criterion: Content: Published or admin */
+  /* Filter criterion: Content: Published status or admin user */
   $handler->display->display_options['filters']['status_extra']['id'] = 'status_extra';
   $handler->display->display_options['filters']['status_extra']['table'] = 'node';
   $handler->display->display_options['filters']['status_extra']['field'] = 'status_extra';
@@ -640,7 +642,7 @@ function events_views_default_views() {
   $handler = $view->new_display('page', 'Page', 'page');
   $handler->display->display_options['defaults']['filter_groups'] = FALSE;
   $handler->display->display_options['defaults']['filters'] = FALSE;
-  /* Filter criterion: Content: Published or admin */
+  /* Filter criterion: Content: Published status or admin user */
   $handler->display->display_options['filters']['status_extra']['id'] = 'status_extra';
   $handler->display->display_options['filters']['status_extra']['table'] = 'node';
   $handler->display->display_options['filters']['status_extra']['field'] = 'status_extra';

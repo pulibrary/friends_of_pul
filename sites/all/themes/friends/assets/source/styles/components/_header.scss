@@ -7,13 +7,21 @@
         border: 1px darken($gray-darkest, 5) solid;
       }
 
-      input[type=text] {
+      input[type="text"] {
         background: $white;
         border: 1px darken($gray-darkest, 5) solid;
       }
 
-      input[type=submit] {
+      input[type="submit"] {
         background: $gray-darkest;
+        border-bottom-left-radius: 0;
+        border-top-left-radius: 0;
+        height: 28px;
+        outline: none;
+        padding: 3px 10px;
+        position: absolute;
+        right: 0;
+        top: 0;
       }
 
       button {
@@ -45,18 +53,7 @@
   padding-right: 0;
 }
 
-.l-region--friends-branding .block--search-form form > div div.form-item input[type=text] {
+.l-region--friends-branding .block--search-form form > div div.form-item input[type="text"] {
   height: 28px;
   width: 100%;
-}
-
-.l-region--friends-branding .block--search-form form > div input[type=submit] {
-  border-bottom-left-radius: 0;
-  border-top-left-radius: 0;
-  height: 28px;
-  outline: none;
-  padding: 3px 10px;
-  position: absolute;
-  right: 0;
-  top: 0;
 }
