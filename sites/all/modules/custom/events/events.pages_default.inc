@@ -98,7 +98,9 @@ function events_default_page_manager_handlers() {
     'admin_title' => '',
     'title' => '',
     'title_heading' => 'h2',
-    'body' => '<iframe src="https://api3.libcal.com/embed_calendar.php?iid=771&cal_id=12260&w=800&h=600&dv=month&st=0&we=1&hl=prev%2Cnext%20today&hc=title&hr=basicWeek%20agendaDay%2CagendaWeek%2Cmonth&hd=dddd%2C%20MMM%20D%2C%20YYYY&hw=MMMM%20D&hm=MMMM%20YYYY&cd=dddd%20M%2FD&cw=ddd%20M%2FD&cm=ddd&ta=h(%3Amm)a&td=h(%3Amm)a&tm=h(%3Amm)a&fh=08%3A00%3A00&mi=00%3A00%3A00&ma=24%3A00%3A00&ts=00%3A30%3A00&eo=1&el=0&hf=1&sp=0&c1=%23000000&c2=%23000000&c3=%23F3F3F3&c4=%23D0D0D0&c5=%23000000&audience=&cam=&cat=50867&tar=0&set=0" style="border: 0" width="800" height="600" frameborder="0" scrolling="auto"></iframe>',
+    'body' => '<iframe src="https://api3.libcal.com/embed_calendar.php?iid=771&cal_id=12260&w=800&h=600&dv=month&st=0&we=1&hl=prev%2Cnext%20today&hc=title&hr=basicWeek%20agendaDay%2CagendaWeek%2Cmonth&hd=dddd%2C%20MMM%20D%2C%20YYYY&hw=MMMM%20D&hm=MMMM%20YYYY&cd=dddd%20M%2FD&cw=ddd%20M%2FD&cm=ddd&ta=h(%3Amm)a&td=h(%3Amm)a&tm=h(%3Amm)a&fh=08%3A00%3A00&mi=00%3A00%3A00&ma=24%3A00%3A00&ts=00%3A30%3A00&eo=1&el=0&hf=1&sp=0&c1=%23000000&c2=%23000000&c3=%23F3F3F3&c4=%23D0D0D0&c5=%23000000&audience=&cam=&cat=50867&tar=0&set=0" style="border: 0" width="800" height="600" frameborder="0" scrolling="auto"></iframe>
+
+<p><a href="https://mediacentral.princeton.edu/channel/Friends%2Bof%2Bthe%2BPrinceton%2BUniversity%2BLibrary/170320411">View recordings of previous events</a>.</p>',
     'format' => 'full_html',
     'substitute' => 1,
   );
@@ -192,7 +194,9 @@ function events_default_page_manager_pages() {
     'admin_title' => '',
     'title' => '',
     'title_heading' => 'h2',
-    'body' => '<div id="api_upc_cid12260_iid771"></div><script type="text/javascript" src="https://api3.libcal.com/api_events.php?iid=771&m=upc&cid=12260&audience=3531&c=&d=50867&l=50&simple=ul_date&context=object&format=js"> </script>',
+    'body' => '<div id="api_upc_cid12260_iid771"></div><script type="text/javascript" src="https://api3.libcal.com/api_events.php?iid=771&m=upc&cid=12260&audience=3531&c=&d=50867&l=50&simple=ul_date&context=object&format=js"> </script>
+
+<p><a href="https://mediacentral.princeton.edu/channel/Friends%2Bof%2Bthe%2BPrinceton%2BUniversity%2BLibrary/170320411">View recordings of previous events</a>.</p>',
     'format' => 'full_html',
     'substitute' => TRUE,
   );
@@ -224,7 +228,10 @@ function events_default_page_manager_pages() {
   $page->admin_title = 'Student Friends Events';
   $page->admin_description = '';
   $page->path = 'events/student-friends';
-  $page->access = array();
+  $page->access = array(
+    'type' => 'none',
+    'settings' => NULL,
+  );
   $page->menu = array();
   $page->arguments = array();
   $page->conf = array(
