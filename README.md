@@ -99,7 +99,14 @@
 
 1. `cd sites/all/themes/pul_base`
 2. `lando npm install`
-3. `lando gulp deploy` (or any other gulp task) 
+3. `lando gulp deploy` (or any other gulp task)
 1. `cd ../friends`
 2. `lando npm install`
-3. `lando gulp deploy` (or any other gulp task) 
+3. `lando gulp deploy` (or any other gulp task)
+
+## Deploy to server
+
+1. We have capistrano set up to deploy our servers
+
+    1. `cap staging deploy` will deploy the master branch to staging
+    1. `BRANCH=other cap staging deploy` will deploy the other branch to staging
