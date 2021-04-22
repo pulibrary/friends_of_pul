@@ -176,7 +176,7 @@ namespace :deploy do
   desc "Set file system variables"
   task :after_deploy_updated do
       invoke "drupal:link_files"
-      invoke "drupal:install_assets"
+      # invoke "drupal:install_assets"
       invoke "drupal:set_permissions_for_runtime"
       # invoke "drupal:set_file_system_variables"
       invoke "drupal:update_directory_owner"
