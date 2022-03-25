@@ -1,11 +1,11 @@
 name: friends
 recipe: drupal7
 config:
-  php: '7.2'
+  php: '7.4'
   webroot: .
 services:
   node:
-    type: 'node:6.15'
+    type: 'node:11.15'
     globals:
       gulp-cli: latest
 tooling:
