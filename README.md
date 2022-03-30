@@ -90,10 +90,11 @@
         ),
     );
     ```
-7. `lando drush @friends.prod sql-dump --structure-tables-list='watchdog,sessions,cas_data_login,history,captcha_sessions,cache,cache_*' --result-file=/tmp/dump.sql; scp pulsys@libraryphp:/tmp/dump.sql .` // Change @libraryphp based on your ssh alias
-8. `lando db-import dump.sql`
-9. `lando drush rsync @friends.prod:%files @friends.local:%files`
-10. `lando drush uli your-username`
+7. `lando drush @friends.prod sql-dump --result-file=/tmp/dump.sql`
+8.  `scp pulsys@libraryphp:/tmp/dump.sql .` // Change @libraryphp based on your ssh alias
+9. `lando db-import dump.sql`
+10. `lando drush rsync @friends.prod:%files @friends.local:%files`
+11. `lando drush uli your-username`
 
 ### Use NPM and Gulp to build styles for drupal theme layer
 
