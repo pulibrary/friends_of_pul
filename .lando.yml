@@ -5,7 +5,7 @@ config:
   webroot: .
 services:
   node:
-    type: 'node:11.15'
+    type: 'node:8'
     globals:
       gulp-cli: latest
 tooling:
