@@ -17,48 +17,53 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  *
- * PHP Version 5
+ * PHP Version 7
  *
- * @file     CAS/ProxyChain/Any.php
+ * @file     CAS/ServiceBaseUrl/Static.php
  * @category Authentication
  * @package  PhpCAS
- * @author   Adam Franco <afranco@middlebury.edu>
+ * @author   Henry Pan <git@phy25.com>
  * @license  http://www.apache.org/licenses/LICENSE-2.0  Apache License 2.0
  * @link     https://wiki.jasig.org/display/CASC/phpCAS
  */
+
 
 /**
- * A proxy-chain definition that will match any list of proxies.
+ * Class that gets the server name of the PHP server by statically set
+ * hostname and port. This is used to generate service URL and PGT
+ * callback URL.
  *
- * Use this class for quick testing or in certain production screnarios you
- * might want to allow allow any other valid service to proxy your service.
- *
- * THIS CLASS IS HOWEVER NOT RECOMMENDED FOR PRODUCTION AND HAS SECURITY
- * IMPLICATIONS: YOU ARE ALLOWING ANY SERVICE TO ACT ON BEHALF OF A USER
- * ON THIS SERVICE.
- *
- * @class    CAS_ProxyChain_Any
+ * @class    CAS_ServiceBaseUrl_Static
  * @category Authentication
  * @package  PhpCAS
- * @author   Adam Franco <afranco@middlebury.edu>
+ * @author   Henry Pan <git@phy25.com>
  * @license  http://www.apache.org/licenses/LICENSE-2.0  Apache License 2.0
  * @link     https://wiki.jasig.org/display/CASC/phpCAS
  */
-class CAS_ProxyChain_Any
-implements CAS_ProxyChain_Interface
-{
 
-    /**
-     * Match a list of proxies.
-     *
-     * @param array $list The list of proxies in front of this service.
-     *
-     * @return bool
-     */
-    public function matches(array $list)
-    {
-        phpCAS::trace("Using CAS_ProxyChain_Any. No proxy validation is performed.");
-        return true;
+class CAS_ServiceBaseUrl_Static
+extends CAS_ServiceBaseUrl_Base
+{
+    private $_name = null;
+
+    public function __construct($name) {
+        if (is_string($name)) {
+            $this->_name = $this->removeStandardPort($name);
+        } else {
+            throw new CAS_TypeMismatchException($name, '$name', 'string');
+        }
     }
 
+    /**
+     * Get the server name through static config.
+     *
+     * @return string the server hostname and port of the server configured
+     */
+    public function get()
+    {
+        phpCAS::traceBegin();
+        phpCAS::trace("Returning static server name: " . $this->_name);
+        phpCAS::traceEnd(true);
+        return $this->_name;
+    }
 }
