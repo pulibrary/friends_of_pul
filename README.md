@@ -90,8 +90,8 @@
         ),
     );
     ```
-7. `lando drush @friends.prod sql-dump --structure-tables-list='watchdog,sessions,cas_data_login,history,captcha_sessions,cache,cache_*' --result-file=/tmp/dump.sql; scp pulsys@libraryphp:/tmp/dump.sql .` // Change @libraryphp based on your ssh alias
-8. `lando db-import dump.sql`
+7. `bundle exec cap production database_dump; scp pulsys@mysql-db-prod1:/tmp/dump.sql.gz .` // Change @libraryphp based on your ssh alias
+8. `lando db-import dump.sql.gz`
 9. `lando drush rsync @friends.prod:%files @friends.local:%files`
 10. `lando drush uli your-username`
 

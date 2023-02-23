@@ -32,6 +32,8 @@ server "fpul-staging1", user: "deploy", roles: %w{app db web drupal_primary}
 # http://capistranorb.com/documentation/getting-started/configuration/
 # Feel free to add new variables to customise your setup.
 
+server "mysql-db-staging1", user: 'pulsys', roles: %w{db}
+set :db_name, "fpul_staging"
 
 
 # Custom SSH Options
