@@ -186,3 +186,10 @@ namespace :deploy do
   after :updated, "deploy:after_deploy_updated"
   before :finishing, "drupal:update_directory_owner_deploy"
 end
+
+desc "Database dump"
+task :database_dump do
+  on release_roles :db do
+    execute "sudo -u root -i mysqldump #{ fetch(:db_name) } | gzip > /tmp/dump.sql.gz"
+  end
+end
