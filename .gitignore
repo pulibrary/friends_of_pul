@@ -3,6 +3,7 @@
 drush/friends.aliases.drushrc.php
 sites/*/settings*.php
 *.sql
+*.sql.gz
 .ssh/*
 # Ignore paths that contain user-generated content.
 sites/*/files

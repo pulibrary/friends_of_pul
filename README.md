@@ -90,8 +90,8 @@
         ),
     );
     ```
-7. `bundle exec cap production database_dump; scp pulsys@mysql-db-prod1:/tmp/dump.sql.gz .` // Change the mysql database based on the environment you request data from.
-8. `lando db-import dump.sql.gz`
+7. `bundle exec cap production database_dump; // this will produce a datestamped dump file in the format "backup-YYYY-MM-DD-{environment}.sql.gz".
+1. `lando db-import backup-YYYY-MM-DD-{environment}.sql.gz`
 9. `lando drush rsync @friends.prod:%files @friends.local:%files`
 10. `lando drush uli your-username`
 
