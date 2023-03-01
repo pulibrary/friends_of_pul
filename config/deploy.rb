@@ -189,7 +189,11 @@ end
 
 desc "Database dump"
 task :database_dump do
+  date = Time.now.strftime("%Y-%m-%d")
+  file_name = "backup-#{date}-#{fetch(:stage)}"
   on release_roles :db do
-    execute "sudo -u root -i mysqldump #{ fetch(:db_name) } | gzip > /tmp/dump.sql.gz"
+    execute "sudo -u root -i mysqldump #{ fetch(:db_name) } > /tmp/#{file_name}.sql"
+    execute "gzip -f /tmp/#{file_name}.sql"
+    download! "/tmp/#{file_name}.sql.gz", "#{file_name}.sql.gz"
   end
 end
