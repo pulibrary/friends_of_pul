@@ -1,9 +1,9 @@
 name: friends
 recipe: drupal7
 config:
-  php: '8.1'
+  php: '8.0'
   webroot: .
-  drush: '8.4.11'
+  drush: '8.4.12'
 services:
   node:
     type: 'node:8'
