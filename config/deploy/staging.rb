@@ -6,9 +6,8 @@
 # server "example.com", user: "deploy", roles: %w{app db web}, my_property: :my_value
 # server "example.com", user: "deploy", roles: %w{app web}, other_property: :other_value
 # server "db.example.com", user: "deploy", roles: %w{db}
-server "fpul-staging1", user: "deploy", roles: %w{app db web drupal_primary}
-
-
+server "fpul-staging1", user: "deploy", roles: %w[app db web drupal_primary]
+server "fpul-staging2", user: "deploy", roles: %w[app db web drupal_primary]
 
 # role-based syntax
 # ==================
@@ -22,8 +21,6 @@ server "fpul-staging1", user: "deploy", roles: %w{app db web drupal_primary}
 # role :web, %w{user1@primary.com user2@additional.com}, other_property: :other_value
 # role :db,  %w{deploy@example.com}
 
-
-
 # Configuration
 # =============
 # You can set any configuration variable like in config/deploy.rb
@@ -33,7 +30,6 @@ server "fpul-staging1", user: "deploy", roles: %w{app db web drupal_primary}
 # Feel free to add new variables to customise your setup.
 
 set :db_name, "fpul_staging"
-
 
 # Custom SSH Options
 # ==================
