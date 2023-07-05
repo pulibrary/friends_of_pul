@@ -9,6 +9,8 @@
 server "fpul-staging1", user: "deploy", roles: %w[app db web drupal_primary]
 server "fpul-staging2", user: "deploy", roles: %w[app db web drupal_secondary]
 
+set :drupal_fileshare_mount, '/mnt/nfs/drupal7'
+set :files_dir, 'fpul_staging_files'
 # role-based syntax
 # ==================
 
