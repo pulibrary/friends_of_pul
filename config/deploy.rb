@@ -3,42 +3,22 @@ lock "~>  3.16"
 
 set :application, "friends_of_pul"
 set :repo_url, "https://github.com/pulibrary/friends_of_pul.git"
-
 set :branch, ENV["BRANCH"] || "main"
 
-# Default branch is :master
-# ask :branch, `git rev-parse --abbrev-ref HEAD`.chomp
+set :keep_releases, 5
 
-# Default deploy_to directory is /var/www/my_app_name
-# set :deploy_to, "/var/www/my_app_name"
+set :deploy_to, '/var/www/friends_of_pul'
 
-# Default value for :format is :airbrussh.
-# set :format, :airbrussh
+set :drupal_settings, '/home/deploy/settings.php'
+set :drupal_site, 'default'
+set :drupal_file_temporary_path, '../../shared/tmp'
+set :drupal_file_public_path, 'sites/default/files'
+set :drupal_file_private_path, 'sites/default/files/private'
+set :cas_cert_location, '/etc/ssl/certs/ssl-cert-snakeoil.pem'
 
-# You can configure the Airbrussh format using :format_options.
-# These are the defaults.
-# set :format_options, command_output: true, log_file: "log/capistrano.log", color: :auto, truncate: :auto
+set :user, 'deploy'
 
-# Default value for :pty is false
-# set :pty, true
-
-# Default value for :linked_files is []
-# append :linked_files, "config/database.yml"
-
-# Default value for linked_dirs is []
 append :linked_dirs, "log", "tmp"
-
-# Default value for default_env is {}
-# set :default_env, { path: "/opt/ruby/bin:$PATH" }
-
-# Default value for local_user is ENV['USER']
-# set :local_user, -> { `git config user.name`.chomp }
-
-# Default value for keep_releases is 5
-# set :keep_releases, 5
-
-# Uncomment the following to require manually verifying the host key before first deploy.
-# set :ssh_options, verify_host_key: :secure
 
 namespace :drupal do
   desc "Include creation of additional Drupal specific shared folders"
