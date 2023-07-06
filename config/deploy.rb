@@ -155,6 +155,14 @@ namespace :drupal do
     end
   end
 
+  desc 'Revert the features to the code'
+  task :features_revert do
+    on release_roles :drupal_primary do
+      execute "sudo -u www-data /usr/local/bin/drush -r #{release_path} -y features-revert-all"
+      info 'reverted the drupal features'
+    end
+  end
+
   namespace :database do
     desc "Run Drush SQL Client against a local sql file SQL_DIR/SQL_GZ"
     task :import_dump do
