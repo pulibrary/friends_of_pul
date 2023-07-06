@@ -163,6 +163,19 @@ namespace :drupal do
     end
   end
 
+  desc 'Upload the files tar and install it FILES_DIR/FILES_GZ'
+  task :upload_files do
+    on release_roles :drupal_primary do
+      gz_file_name = ENV['FILES_GZ']
+      tar_file_name = gz_file_name.sub('.gz', '')
+      upload! File.join(ENV['FILES_DIR'], gz_file_name), "/tmp/#{gz_file_name}"
+      execute "sudo -u www-data cp /tmp/#{gz_file_name} #{fetch(:drupal_fileshare_mount)}/#{fetch(:files_dir)}"
+      execute "sudo -u www-data gzip -f -d #{fetch(:drupal_fileshare_mount)}/#{fetch(:files_dir)}/#{gz_file_name}"
+      execute "cd #{fetch(:drupal_fileshare_mount)}/#{fetch(:files_dir)} && sudo -u www-data tar -xvf #{tar_file_name}"
+      execute "sudo -u www-data rm -f #{fetch(:drupal_fileshare_mount)}/#{fetch(:files_dir)}/#{tar_file_name}"
+    end
+  end
+
   namespace :database do
     desc "Run Drush SQL Client against a local sql file SQL_DIR/SQL_GZ"
     task :import_dump do
