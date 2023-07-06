@@ -25,6 +25,7 @@ namespace :drupal do
   task :prepare_shared_paths do
     on release_roles :app do
       execute :mkdir, "-p", "#{shared_path}/tmp"
+      execute :sudo, "/bin/chown -R www-data #{shared_path}/tmp"
       execute :mkdir, "-p", "#{shared_path}/node_modules"
     end
   end
@@ -123,6 +124,34 @@ namespace :drupal do
         end
       #execute :sudo, "/bin/chown -R deploy /var/www/friends_of_pul/releases/*"
       #execute :chmod, "-R u+w /var/www/friends_of_pul/releases/*"
+    end
+  end
+
+  desc 'change the owner of the directory to www-data for apache'
+  task :restart_apache2 do
+    on release_roles :drupal_primary do
+      info 'starting restart on primary'
+      execute :sudo, '/usr/sbin/service apache2 restart'
+      info 'completed restart on primary'
+    end
+    on release_roles :drupal_secondary do
+      info 'starting restart on secondary'
+      execute :sudo, '/usr/sbin/service apache2 restart'
+      info 'completed restart on secondary'
+    end
+  end
+
+  desc 'Stop the apache2 process'
+  task :stop_apache2 do
+    on release_roles :app do
+      execute :sudo, '/usr/sbin/service apache2 stop'
+    end
+  end
+
+  desc 'Start the apache2 process'
+  task :start_apache2 do
+    on release_roles :app do
+      execute :sudo, '/usr/sbin/service apache2 start'
     end
   end
 
