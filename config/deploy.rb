@@ -3,48 +3,29 @@ lock "~>  3.16"
 
 set :application, "friends_of_pul"
 set :repo_url, "https://github.com/pulibrary/friends_of_pul.git"
-
 set :branch, ENV["BRANCH"] || "main"
 
-# Default branch is :master
-# ask :branch, `git rev-parse --abbrev-ref HEAD`.chomp
+set :keep_releases, 5
 
-# Default deploy_to directory is /var/www/my_app_name
-# set :deploy_to, "/var/www/my_app_name"
+set :deploy_to, '/var/www/friends_of_pul'
 
-# Default value for :format is :airbrussh.
-# set :format, :airbrussh
+set :drupal_settings, '/home/deploy/settings.php'
+set :drupal_site, 'default'
+set :drupal_file_temporary_path, '../../shared/tmp'
+set :drupal_file_public_path, 'sites/default/files'
+set :drupal_file_private_path, 'sites/default/files/private'
+set :cas_cert_location, '/etc/ssl/certs/ssl-cert-snakeoil.pem'
 
-# You can configure the Airbrussh format using :format_options.
-# These are the defaults.
-# set :format_options, command_output: true, log_file: "log/capistrano.log", color: :auto, truncate: :auto
+set :user, 'deploy'
 
-# Default value for :pty is false
-# set :pty, true
-
-# Default value for :linked_files is []
-# append :linked_files, "config/database.yml"
-
-# Default value for linked_dirs is []
 append :linked_dirs, "log", "tmp"
-
-# Default value for default_env is {}
-# set :default_env, { path: "/opt/ruby/bin:$PATH" }
-
-# Default value for local_user is ENV['USER']
-# set :local_user, -> { `git config user.name`.chomp }
-
-# Default value for keep_releases is 5
-# set :keep_releases, 5
-
-# Uncomment the following to require manually verifying the host key before first deploy.
-# set :ssh_options, verify_host_key: :secure
 
 namespace :drupal do
   desc "Include creation of additional Drupal specific shared folders"
   task :prepare_shared_paths do
     on release_roles :app do
       execute :mkdir, "-p", "#{shared_path}/tmp"
+      execute :sudo, "/bin/chown -R www-data #{shared_path}/tmp"
       execute :mkdir, "-p", "#{shared_path}/node_modules"
     end
   end
@@ -143,6 +124,55 @@ namespace :drupal do
         end
       #execute :sudo, "/bin/chown -R deploy /var/www/friends_of_pul/releases/*"
       #execute :chmod, "-R u+w /var/www/friends_of_pul/releases/*"
+    end
+  end
+
+  desc 'change the owner of the directory to www-data for apache'
+  task :restart_apache2 do
+    on release_roles :drupal_primary do
+      info 'starting restart on primary'
+      execute :sudo, '/usr/sbin/service apache2 restart'
+      info 'completed restart on primary'
+    end
+    on release_roles :drupal_secondary do
+      info 'starting restart on secondary'
+      execute :sudo, '/usr/sbin/service apache2 restart'
+      info 'completed restart on secondary'
+    end
+  end
+
+  desc 'Stop the apache2 process'
+  task :stop_apache2 do
+    on release_roles :app do
+      execute :sudo, '/usr/sbin/service apache2 stop'
+    end
+  end
+
+  desc 'Start the apache2 process'
+  task :start_apache2 do
+    on release_roles :app do
+      execute :sudo, '/usr/sbin/service apache2 start'
+    end
+  end
+
+  desc 'Revert the features to the code'
+  task :features_revert do
+    on release_roles :drupal_primary do
+      execute "sudo -u www-data /usr/local/bin/drush -r #{release_path} -y features-revert-all"
+      info 'reverted the drupal features'
+    end
+  end
+
+  desc 'Upload the files tar and install it FILES_DIR/FILES_GZ'
+  task :upload_files do
+    on release_roles :drupal_primary do
+      gz_file_name = ENV['FILES_GZ']
+      tar_file_name = gz_file_name.sub('.gz', '')
+      upload! File.join(ENV['FILES_DIR'], gz_file_name), "/tmp/#{gz_file_name}"
+      execute "sudo -u www-data cp /tmp/#{gz_file_name} #{fetch(:drupal_fileshare_mount)}/#{fetch(:files_dir)}"
+      execute "sudo -u www-data gzip -f -d #{fetch(:drupal_fileshare_mount)}/#{fetch(:files_dir)}/#{gz_file_name}"
+      execute "cd #{fetch(:drupal_fileshare_mount)}/#{fetch(:files_dir)} && sudo -u www-data tar -xvf #{tar_file_name}"
+      execute "sudo -u www-data rm -f #{fetch(:drupal_fileshare_mount)}/#{fetch(:files_dir)}/#{tar_file_name}"
     end
   end
 
