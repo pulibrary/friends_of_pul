@@ -6,8 +6,8 @@
 # server "example.com", user: "deploy", roles: %w{app db web}, my_property: :my_value
 # server "example.com", user: "deploy", roles: %w{app web}, other_property: :other_value
 # server "db.example.com", user: "deploy", roles: %w{db}
-server "fpul-staging1", user: "deploy", roles: %w[app db web drupal_primary]
-server "fpul-staging2", user: "deploy", roles: %w[app db web]
+server "fpul-staging1.lib.princeton.edu", user: "deploy", roles: %w[app db web drupal_primary]
+server "fpul-staging2.lib.princeton.edu", user: "deploy", roles: %w[app db web]
 
 
 set :drupal_fileshare_mount, '/mnt/nfs/drupal7'
